@@ -4,18 +4,29 @@ on:
     branches: [development, main]
   push:
     branches: [development]
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('android-app/**') != '' }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
-      - name: Gradle build
-        working-directory: android-app
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install SDK components
         run: |
-          chmod +x ./gradlew || true
-          ./gradlew clean build --stacktrace
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Make gradlew executable
+        run: chmod +x android-app/gradlew
+
+      - name: Build (assembleDebug)
+        working-directory: android-app
+        run: ./gradlew clean assembleDebug --stacktrace
