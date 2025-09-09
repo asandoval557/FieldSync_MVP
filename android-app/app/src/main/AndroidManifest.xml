@@ -3,8 +3,11 @@
 
     <application
             android:allowBackup="true"
+            android:theme="@style/Theme.FieldSync.AppCompat"
             android:label="@string/app_name"
             android:supportsRtl="true">
+
+
         <activity
                 android:name=".main_menu"
                 android:exported="false"/>
@@ -17,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name=".StoreManagement"
+                android:theme="@style/Theme.FieldSync.AppCompat"/>
     </application>
 
 </manifest>
