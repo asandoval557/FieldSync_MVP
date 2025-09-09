@@ -22,10 +22,10 @@ FieldSync solves the inefficiency facing field account managers who must track v
 ---
 
 ## MVP Scope (Android-only)
-
-- **User Authentication** — email/password registration & login
+- **UI/UX build out** — Build out the UI for the application
+- **User Authentication** — email/password registration & login (Mock up up user authentication)
 - **Store Management** — view assigned stores & key info
-- **GPS Check-In/Out** — location-verified visits with duration
+- **GPS Check-In/Out** — location-verified visits with duration (Manual check in/out for MVP, if time permits circle back and add GPS API)
 - **Photo Capture** — attach photos as visit proof
 - **Visit Notes** — text notes per visit
 - **Visit History** — past visits with timestamps & duration
