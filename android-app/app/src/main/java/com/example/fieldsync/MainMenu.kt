@@ -32,5 +32,10 @@ class MainMenu : Fragment(R.layout.fragment_main_menu)
             val activity = activity as MainActivity?
             activity?.SetActiveFragment(VisitHistory())
         }
+
+        binding.mainMenuVisitNotesBtn.setOnClickListener {
+            val activity = activity as MainActivity?
+            activity?.SetActiveFragment(VisitNotes())
+        }
     }
 }

@@ -25,6 +25,10 @@ class CheckIn : Fragment(R.layout.fragment_check_in) {
             insets
         }
 
+        // This code controls what happens when Check-In button is pressed
+        binding.checkInCheckInBtn.setOnClickListener {
+
+        }
 
         return binding.root
     }
