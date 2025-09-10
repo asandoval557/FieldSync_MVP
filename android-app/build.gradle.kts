@@ -3,7 +3,4 @@
         google()
         mavenCentral()
     }
-    dependencies {
-
-    }
 }
