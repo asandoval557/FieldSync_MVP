@@ -1,4 +1,4 @@
-package com.example.fieldsync
+package com.example.fieldsync.StoreManagement
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.fieldsync.R
 import com.example.fieldsync.databinding.ActivityStoreManagementBinding
 
 class StoreManagement : AppCompatActivity() {

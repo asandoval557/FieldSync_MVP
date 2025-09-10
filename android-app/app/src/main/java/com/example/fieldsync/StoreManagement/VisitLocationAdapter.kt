@@ -1,4 +1,4 @@
-package com.example.fieldsync
+package com.example.fieldsync.StoreManagement
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".StoreManagement"
+                android:name=".StoreManagement.StoreManagement"
                 android:theme="@style/Theme.FieldSync.AppCompat"/>
     </application>
 
