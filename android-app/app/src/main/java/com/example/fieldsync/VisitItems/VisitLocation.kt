@@ -1,4 +1,4 @@
-package com.example.fieldsync.StoreManagement
+package com.example.fieldsync.VisitItems
 
 // Represents a scheduled visit to a store location
 data class VisitLocation(

@@ -1,4 +1,4 @@
-package com.example.fieldsync.StoreManagement
+package com.example.fieldsync
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fieldsync.R
+import com.example.fieldsync.VisitItems.VisitLocation
+import com.example.fieldsync.VisitItems.VisitLocationAdapter
 import com.example.fieldsync.databinding.FragmentStoreManagementBinding
 
 class StoreManagement : Fragment(R.layout.fragment_store_management)  {

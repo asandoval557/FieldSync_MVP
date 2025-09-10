@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.example.fieldsync.StoreManagement.StoreManagement
 import com.example.fieldsync.databinding.FragmentMainMenuBinding
 
 class MainMenu : Fragment(R.layout.fragment_main_menu)
@@ -27,6 +26,11 @@ class MainMenu : Fragment(R.layout.fragment_main_menu)
         binding.mainMenuStoreManagementBtn.setOnClickListener {
             val activity = activity as MainActivity?
             activity?.SetActiveFragment(StoreManagement())
+        }
+
+        binding.mainMenuVisitHistoryBtn.setOnClickListener {
+            val activity = activity as MainActivity?
+            activity?.SetActiveFragment(VisitHistory())
         }
     }
 }
