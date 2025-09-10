@@ -1,5 +1,6 @@
 package com.example.fieldsync.StoreManagement
 
+// Represents a scheduled visit to a store location
 data class VisitLocation(
     val name: String,
     val address: String,

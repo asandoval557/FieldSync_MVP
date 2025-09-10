@@ -1,12 +1,10 @@
 ﻿package com.example.fieldsync
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.fieldsync.StoreManagement.StoreManagement
+import androidx.fragment.app.Fragment
 import com.example.fieldsync.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -25,10 +23,22 @@ class MainActivity : AppCompatActivity() {
       insets
     }
 
-    binding.storeManagementButton.setOnClickListener {
-      startActivity(Intent(this, StoreManagement::class.java))
-    }
+    SetActiveFragment(MainMenu())
+
+  }
+
+  // Swaps Main with a new fragment
+  public fun SetActiveFragment(fragment: Fragment) {
+    // lets you perform actions on fragments
+    val transaction = supportFragmentManager.beginTransaction()
+
+    // replaces main with new fragment
+    transaction.replace(R.id.main, fragment)
+
+    // Applies operation performed on fragment
+    transaction.commit()
   }
 }
+
 
 
