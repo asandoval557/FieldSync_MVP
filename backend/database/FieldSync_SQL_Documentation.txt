@@ -1,0 +1,120 @@
+-- Prerequisites
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+run fs_schema.sql to create all tables
+
+TABLE STRUCTURE
+
+1. Users table - 
+id: Unique identifier for each user 
+email: Login credential, must be unique
+password_hash: Encrypted password (never store plain text passwords)
+full_name, phone: Basic contact info
+is_active: Allows you to disable users without deleting them
+created_at, updated_at: Automatic timestamps for tracking
+
+2. Stores table -
+name, address, city, state, zip_code: Store location details
+latitude, longitude: GPS coordinates for check-in verification
+store_type: Categories like "supermarket", "convenience", "big_box" (used for surveys later)
+assigned_user_id: Links each store to exactly one manager
+REFERENCES users(id) ON DELETE RESTRICT: If you try to delete a user who has stores, it will block the deletion
+
+3. Visits table - 
+store_id, user_id: Links visit to specific store and manager
+check_in_time: When they arrived (required)
+check_out_time: When they left (optional until they check out)
+duration_minutes: Calculated automatically when checking out
+check_in_latitude/longitude: GPS verification they were actually there
+notes: Flexible text field for your teammate's visit notes feature
+visit_purpose: Why they visited ("routine", "launch_support", "problem_resolution")
+compliance_status: Assessment result ("compliant", "non_compliant", "needs_attention")
+
+4. Visit photos table -
+visit_id: Links photo to specific visit
+photo_url: Path to stored image file (local or cloud storage)
+photo_type: Categories like "compliance", "merchandising", "before", "after"
+caption: Optional description of what the photo shows
+latitude/longitude: GPS where photo was taken (might be slightly different from check-in location)
+file_size_kb: For storage management
+
+5. Survey System -
+surveys: Master list of questionnaires
+survey_questions: Individual questions within each survey
+survey_deployments: Controls who gets which surveys when
+survey_responses: Stores completed survey answers
+
+6. Sales data table -
+Links sales performance to specific stores
+sale_date: When the sale occurred
+sales_amount: Dollar value (Decimal for precise currency)
+data_source: How the data got here ("pos_system", "manual_entry", "api_import")
+
+key relationships are:
+
+One user has many stores
+One store has many visits
+One visit has many photos
+Everything traces back to which manager visited which store when
+
+
+
+INDEXES:
+
+- PRIMARY LOOKUP INDEXES
+
+CREATE INDEX idx_stores_assigned_user ON stores(assigned_user_id);
+Purpose: When a manager opens the app, you need to quickly find "all stores assigned to this user"
+Without this: Database would scan every store record to find matches
+With this: Direct lookup to find the 3-9 stores for that manager
+
+CREATE INDEX idx_stores_location ON stores(latitude, longitude);
+Purpose: For GPS-based features - finding stores near a location
+Use case: "Show me stores within 1 mile of my current position"
+Performance: Enables spatial queries without scanning all coordinates
+
+CREATE INDEX idx_visits_store_user ON visits(store_id, user_id);
+Purpose: Find all visits for a specific store-user combination
+Use case: "Show visit history for Store ABC by Manager John"
+Compound index: Covers both store_id and user_id lookups efficiently
+
+CREATE INDEX idx_visits_check_in_time ON visits(check_in_time);
+Purpose: Time-based queries like "visits from last 30 days"
+Use case: Generating reports, finding recent activity
+Performance: Enables fast date range queries
+
+CREATE INDEX idx_visit_photos_visit ON visit_photos(visit_id);
+Purpose: Load all photos for a specific visit
+Use case: When displaying visit details, show all associated photos
+Critical for: Photo galleries in your app
+
+
+-SURVEY SYSTEM INDEXES
+
+sqlCREATE INDEX idx_survey_deployments_user ON survey_deployments(target_user_id);
+CREATE INDEX idx_survey_deployments_store ON survey_deployments(target_store_id);
+Purpose: Find surveys assigned to specific users or stores
+Use case: "What surveys should this manager complete at this store?"
+Future feature: Dynamic survey deployment
+
+sqlCREATE INDEX idx_survey_responses_survey ON survey_responses(survey_id);
+CREATE INDEX idx_survey_responses_user_store ON survey_responses(user_id, store_id);
+Purpose: Analyze survey completion and responses
+Use case: "How many people completed Survey X?" or "What surveys has this manager completed at this store?"
+
+- SALES DATA INDEXES
+
+sqlCREATE INDEX idx_sales_data_store_date ON sales_data(store_id, sale_date);
+Purpose: Your Beta feature - 90-day sales visualization
+Use case: "Show sales data for Store ABC over the last 90 days"
+Performance: Critical for the sales charts you'll display during visits
+
+sqlCREATE INDEX idx_sales_data_date_range ON sales_data(sale_date);
+Purpose: Date-based sales analysis across all stores
+Use case: "Compare this month's performance vs last month"
+
+
+
+
+
