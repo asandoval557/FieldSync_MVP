@@ -19,6 +19,10 @@ import com.example.fieldsync.databinding.FragmentLoginBinding
 
 import com.example.fieldsync.R
 
+import android.content.Intent
+import com.example.fieldsync.MainMenu
+
+
 class LoginFragment : Fragment() {
 
     private lateinit var loginViewModel: LoginViewModel
@@ -63,17 +67,23 @@ class LoginFragment : Fragment() {
                 }
             })
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner,
-            Observer { loginResult ->
-                loginResult ?: return@Observer
-                loadingProgressBar.visibility = View.GONE
-                loginResult.error?.let {
-                    showLoginFailed(it)
-                }
-                loginResult.success?.let {
-                    updateUiWithUser(it)
-                }
-            })
+        loginViewModel.loginResult.observe(viewLifecycleOwner) { loginResult ->
+            loginResult ?: return@observe
+            loadingProgressBar.visibility = View.GONE
+
+            loginResult.error?.let {
+                showLoginFailed(it)
+            }
+
+            loginResult.success?.let {
+                updateUiWithUser(it) // keep your existing UI update
+                // --> Navigate to MainMenu
+                val intent = Intent(requireContext(), MainMenu::class.java)
+                startActivity(intent)
+                requireActivity().finish() // optional: prevents back to Login
+            }
+        }
+
 
         val afterTextChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

@@ -1,24 +1,33 @@
 package com.example.fieldsync.data
 
 import com.example.fieldsync.data.model.LoggedInUser
-import java.io.IOException
+import java.util.UUID
 
-/**
- * Class that handles authentication w/ login credentials and retrieves user information.
- */
 class LoginDataSource {
 
+    companion object {
+        // MVP default credentials (change if you want)
+        const val DEFAULT_EMAIL = "test@example.com"
+        const val DEFAULT_PASSWORD = "Passw0rd!"
+    }
+
     fun login(username: String, password: String): Result<LoggedInUser> {
-        try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
+        return try {
+            if (username.equals(DEFAULT_EMAIL, ignoreCase = true) && password == DEFAULT_PASSWORD) {
+                val fakeUser = LoggedInUser(
+                    userId = UUID.randomUUID().toString(),
+                    displayName = "FieldSync User"
+                )
+                Result.Success(fakeUser)
+            } else {
+                Result.Error(Exception("Invalid credentials"))
+            }
+        } catch (e: Exception) {
+            Result.Error(e)
         }
     }
 
     fun logout() {
-        // TODO: revoke authentication
+        // No-op in fake auth
     }
 }
