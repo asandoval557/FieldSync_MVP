@@ -36,6 +36,10 @@ class VisitHistory : Fragment(R.layout.fragment_visit_history) {
             adapter = VisitLocationAdapter(visitHistoryList)
         }
 
+        binding.visitHistoryBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 

@@ -46,6 +46,10 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
             adapter = VisitLocationAdapter(visitList)
         }
 
+        binding.storeManagementBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 

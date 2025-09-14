@@ -30,6 +30,10 @@ class VisitNotes : Fragment() {
 
         }
 
+        binding.visitNotesBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 
