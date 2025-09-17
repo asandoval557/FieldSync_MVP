@@ -20,6 +20,7 @@ import com.example.fieldsync.databinding.FragmentLoginBinding
 import com.example.fieldsync.R
 
 import android.content.Intent
+import com.example.fieldsync.MainActivity
 import com.example.fieldsync.MainMenu
 
 
@@ -76,11 +77,10 @@ class LoginFragment : Fragment() {
             }
 
             loginResult.success?.let {
-                updateUiWithUser(it) // keep your existing UI update
-                // --> Navigate to MainMenu
-                val intent = Intent(requireContext(), MainMenu::class.java)
-                startActivity(intent)
-                requireActivity().finish() // optional: prevents back to Login
+                updateUiWithUser(it)
+                // Navigate to MainMenu (Fragment) after successful fake login
+                (requireActivity() as MainActivity).SetActiveFragment(MainMenu())
+                // Do NOT call startActivity()
             }
         }
 
