@@ -36,7 +36,7 @@ class VisitNotes : Fragment() {
                 return@setOnClickListener
             }
 
-            val note = Note(visit_id = visitId, content = noteText)
+            val note = Note(visitId = visitId, body = noteText)
 
             RetrofitClient.instance.addNote(visitId, note)
                 .enqueue(object : Callback<Note> {
@@ -60,8 +60,9 @@ class VisitNotes : Fragment() {
                 .enqueue(object : Callback<List<Note>> {
                     override fun onResponse(call: Call<List<Note>>, response: Response<List<Note>>) {
                         if (response.isSuccessful) {
-                            val notes = response.body()?.joinToString("\n") { "ID: ${it.id}, ${it.content}" }
-                                ?: "No notes found"
+                            val notes = response.body()?.joinToString("\n") {
+                                "ID: ${it.id}, ${it.body}"
+                            } ?: "No notes found"
                             binding.visitNotesResultTxt.text = notes
                         } else {
                             binding.visitNotesResultTxt.text = "Failed to load notes"
@@ -82,7 +83,7 @@ class VisitNotes : Fragment() {
                 return@setOnClickListener
             }
 
-            val updatedNote = Note(visit_id = visitId, content = noteText)
+            val updatedNote = Note(visitId = visitId, body = noteText)
 
             RetrofitClient.instance.updateNote(visitId, hardcodedNoteId, updatedNote)
                 .enqueue(object : Callback<Note> {

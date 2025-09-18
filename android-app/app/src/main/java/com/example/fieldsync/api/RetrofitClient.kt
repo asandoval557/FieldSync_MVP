@@ -12,10 +12,11 @@ object RetrofitClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .build()
-
+    private val client: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+    }
 
     val instance: VisitNotesApi by lazy {
         Retrofit.Builder()

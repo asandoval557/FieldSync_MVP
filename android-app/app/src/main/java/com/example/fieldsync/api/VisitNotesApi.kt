@@ -1,29 +1,40 @@
 package com.example.fieldsync.api
 
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.*
 
 data class Note(
     val id: Int? = null,
-    val visit_id: Int,
-    val content: String
+
+    @SerializedName("visit_id")
+    val visitId: Int,
+
+    @SerializedName("body")
+    val body: String,
+
+    @SerializedName("photo_url")
+    val photoUrl: String? = null
 )
 
 interface VisitNotesApi {
-    @GET("notes/{visit_id}")
+    @GET("visits/{visit_id}/notes")
     fun getNotes(@Path("visit_id") visitId: Int): Call<List<Note>>
 
-    @POST("notes/{visit_id}")
-    fun addNote(@Path("visit_id") visitId: Int, @Body note: Note): Call<Note>
+    @POST("visits/{visit_id}/notes")
+    fun addNote(
+        @Path("visit_id") visitId: Int,
+        @Body note: Note
+    ): Call<Note>
 
-    @PUT("notes/{visit_id}/{note_id}")
+    @PUT("visits/{visit_id}/notes/{note_id}")
     fun updateNote(
         @Path("visit_id") visitId: Int,
         @Path("note_id") noteId: Int,
         @Body note: Note
     ): Call<Note>
 
-    @DELETE("notes/{visit_id}/{note_id}")
+    @DELETE("visits/{visit_id}/notes/{note_id}")
     fun deleteNote(
         @Path("visit_id") visitId: Int,
         @Path("note_id") noteId: Int
