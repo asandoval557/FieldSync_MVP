@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
       insets
     }
 
-    SetActiveFragment(LoginFragment())
+    SetActiveFragment(VisitNotes())
 
   }
 
