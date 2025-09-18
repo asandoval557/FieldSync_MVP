@@ -37,5 +37,10 @@ class MainMenu : Fragment(R.layout.fragment_main_menu)
             val activity = activity as MainActivity?
             activity?.SetActiveFragment(VisitNotes())
         }
+
+        binding.mainMenuPhotoCaptureBtn.setOnClickListener {
+            val activity = activity as MainActivity?
+            activity?.SetActiveFragment(PhotoCapture())
+        }
     }
 }
