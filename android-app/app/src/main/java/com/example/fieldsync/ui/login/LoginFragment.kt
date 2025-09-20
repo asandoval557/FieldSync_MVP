@@ -19,6 +19,11 @@ import com.example.fieldsync.databinding.FragmentLoginBinding
 
 import com.example.fieldsync.R
 
+import android.content.Intent
+import com.example.fieldsync.MainActivity
+import com.example.fieldsync.MainMenu
+
+
 class LoginFragment : Fragment() {
 
     private lateinit var loginViewModel: LoginViewModel
@@ -63,17 +68,22 @@ class LoginFragment : Fragment() {
                 }
             })
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner,
-            Observer { loginResult ->
-                loginResult ?: return@Observer
-                loadingProgressBar.visibility = View.GONE
-                loginResult.error?.let {
-                    showLoginFailed(it)
-                }
-                loginResult.success?.let {
-                    updateUiWithUser(it)
-                }
-            })
+        loginViewModel.loginResult.observe(viewLifecycleOwner) { loginResult ->
+            loginResult ?: return@observe
+            loadingProgressBar.visibility = View.GONE
+
+            loginResult.error?.let {
+                showLoginFailed(it)
+            }
+
+            loginResult.success?.let {
+                updateUiWithUser(it)
+                // Navigate to MainMenu (Fragment) after successful fake login
+                (requireActivity() as MainActivity).SetActiveFragment(MainMenu())
+                // Do NOT call startActivity()
+            }
+        }
+
 
         val afterTextChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

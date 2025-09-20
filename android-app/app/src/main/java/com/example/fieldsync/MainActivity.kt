@@ -6,6 +6,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.fieldsync.databinding.ActivityMainBinding
+import com.example.fieldsync.ui.login.LoginFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
       insets
     }
 
-    SetActiveFragment(MainMenu())
+    SetActiveFragment(VisitNotes())
 
   }
 

@@ -2,7 +2,7 @@
 uvicorn[standard]==0.30.6
 pydantic==2.8.2
 SQLAlchemy==2.0.32
-psycopg[binary]==3.2.1
+psycopg[binary]==3.2.10
 python-jose==3.3.0
 passlib[bcrypt]==1.7.4
 alembic==1.13.2

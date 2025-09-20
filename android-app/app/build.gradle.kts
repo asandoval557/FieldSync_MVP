@@ -71,7 +71,11 @@ dependencies {
   implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
   implementation("androidx.annotation:annotation:1.9.1")
 
-
+  implementation("com.squareup.retrofit2:retrofit:2.11.0")
+  implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+  implementation("com.squareup.okhttp3:okhttp:4.12.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
 
 
