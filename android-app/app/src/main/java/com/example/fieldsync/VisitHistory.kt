@@ -30,12 +30,21 @@ class VisitHistory : Fragment(R.layout.fragment_visit_history) {
         val userId = UUID.fromString("f98f31a9-ab9f-416f-89b0-39531122b9a9")
         lifecycleScope.launch {
             try {
+                binding.visitHistoryErrorTxt.text = "Loading..."
+                binding.visitHistoryErrorTxt.visibility = View.VISIBLE
                 val visits = RetrofitClient.visitHistoryApi.getVisitHistory(userId)
                 binding.viewHistoryRecycleView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     adapter = VisitLocationAdapter(visits)
+                    binding.visitHistoryErrorTxt.visibility = View.INVISIBLE
+                    if(visits.isEmpty()) {
+                        binding.visitHistoryErrorTxt.text = "No visits found"
+                        binding.visitHistoryErrorTxt.visibility = View.VISIBLE
+                    }
                 }
             } catch (e: Exception) {
+                binding.visitHistoryErrorTxt.text = "Failed to retrieve past visits"
+                binding.visitHistoryErrorTxt.visibility = View.VISIBLE
                 Log.e("VisitHistory", "Failed to load visits", e)
             }
         }

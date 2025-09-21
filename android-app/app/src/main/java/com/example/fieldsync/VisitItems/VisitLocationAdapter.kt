@@ -27,6 +27,18 @@ class VisitLocationAdapter(
     }
 
     override fun onBindViewHolder(holder: VisitViewHolder, position: Int) {
+
+        if (visitLocations.isEmpty()) {
+            with(holder.binding) {
+                storeStoreNameTxt.text = "No past visits found"
+                storeStoreAddressTxt.text = ""
+                storeStoreTimeTxt.text = ""
+                storeStoreStatusTxt.text = ""
+                storeStoreDurationTxt.text = ""
+            }
+            return
+        }
+
         val visit = visitLocations[position]
         with(holder.binding) {
             storeStoreNameTxt.text = visit.store_name

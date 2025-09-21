@@ -11,7 +11,6 @@ import uvicorn
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup logic
-    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield
 
