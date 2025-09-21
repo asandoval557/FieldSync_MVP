@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 # For MVP local PostgresSQL, but can be changed via environment variable
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:@localhost:5432/fieldsync"
+    "postgresql://postgres:monkey57@localhost:5432/fieldsync"
     # IMPORTANT: This is set to a local path for PostgreSQL, you must load your own password and create a local version of DB for the MVP
 )
 
