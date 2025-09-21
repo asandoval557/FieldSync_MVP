@@ -5,7 +5,7 @@ from ..db import Base
 class Store(Base):
     __tablename__ = "stores"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     name = Column(String)
     address = Column(String)
     visits = relationship("Visit", back_populates="store")

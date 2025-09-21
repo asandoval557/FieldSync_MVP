@@ -20,8 +20,7 @@ def get_filtered_visits(
         store_id: Optional[UUID] = Query(None),
         db: Session = Depends(get_db)
 ):
-
-    query = db.query(Visit).join(Store).filter(Visit.user_id == user_id)
+    query = db.query(Visit).filter(Visit.user_id == str(user_id))
 
     if start_date:
         query = query.filter(Visit.check_in_time >= start_date)

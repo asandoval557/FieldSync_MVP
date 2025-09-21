@@ -3,14 +3,14 @@ from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Text, DECI
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from ..db import Base
+from app.db import Base
 
 class Visit(Base):
     __tablename__ = "visits"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(UUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    id = Column(String, primary_key=True)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
     check_in_time = Column(DateTime(timezone=True), nullable=False)
     check_out_time = Column(DateTime(timezone=True))
