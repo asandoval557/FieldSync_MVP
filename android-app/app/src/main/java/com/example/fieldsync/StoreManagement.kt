@@ -38,6 +38,10 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
         }
 
+        binding.storeManagementBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 

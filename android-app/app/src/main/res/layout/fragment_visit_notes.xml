@@ -77,6 +77,17 @@
                     android:text="Delete" />
         </LinearLayout>
 
+        <ImageButton
+                android:id="@+id/visit_notes_backBtn"
+                android:layout_width="56dp"
+                android:layout_height="49dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
+                app:layout_constraintHorizontal_bias="0.014"/>
+
         <!-- Result output -->
         <TextView
                 android:id="@+id/visit_notes_resultTxt"
