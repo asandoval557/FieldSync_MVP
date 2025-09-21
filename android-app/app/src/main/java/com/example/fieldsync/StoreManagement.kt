@@ -32,18 +32,14 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
         }
 
         // Sample list of upcoming store visits
-        val visitList = listOf(
-            VisitLocation("Best Buy - Downtown", "123 Main St, San Antonio, TX",
-                "9:00 AM - 10:30 AM", "Upcoming"),
-            VisitLocation("Target - Northside", "456 Oak Ave, San Antonio, TX",
-                "11:00 AM - 12:30 PM", "Upcoming"),
-            VisitLocation("Walmart - Southpark", "789 Elm St, San Antonio, TX",
-                "2:00 PM - 3:30 PM", "Upcoming")
-        )
+
 
         binding.visitRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = VisitLocationAdapter(visitList)
+
+        }
+
+        binding.storeManagementBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         return binding.root

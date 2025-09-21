@@ -84,6 +84,10 @@ class PhotoCapture : Fragment() {
             }
         }
 
+        binding.photoCaptureBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 

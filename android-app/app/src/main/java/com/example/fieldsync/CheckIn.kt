@@ -78,6 +78,10 @@ class CheckIn : Fragment(R.layout.fragment_check_in) {
             updateUi(checkedIn = false, store = store, start = start, end = end)
         }
 
+        binding.checkInBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 

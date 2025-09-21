@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
       insets
     }
 
-    SetActiveFragment(LoginFragment())
+    SetActiveFragment(MainMenu())
 
   }
 
@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     // replaces main with new fragment
     transaction.replace(R.id.main, fragment)
+
+      .addToBackStack(null)
 
     // Applies operation performed on fragment
     transaction.commit()
