@@ -47,11 +47,14 @@ class CheckIn : Fragment(R.layout.fragment_check_in) {
             }
 
             val now = System.currentTimeMillis()
+            // generate visitId
+            val newVisitId = prefs.getInt(KEY_VISIT_ID, 0) + 1
             prefs.edit()
                 .putBoolean(KEY_CHECKED_IN, true)
                 .putString(KEY_STORE, store)
                 .putLong(KEY_START_TIME, now)
                 .putLong(KEY_END_TIME, 0L)
+                .putInt(KEY_VISIT_ID, newVisitId)   // save visitId
                 .apply()
 
             updateUi(checkedIn = true, store = store, start = now, end = 0L)
@@ -143,5 +146,6 @@ class CheckIn : Fragment(R.layout.fragment_check_in) {
         private const val KEY_START_TIME  = "start_time"
         private const val KEY_END_TIME    = "end_time"
         private const val KEY_VISIT_LOG   = "visit_log"
+        private const val KEY_VISIT_ID    = "visit_id"
     }
 }

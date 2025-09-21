@@ -37,6 +37,19 @@
                 android:minHeight="100dp"
                 android:padding="8dp" />
 
+        <!-- Note ID input for Update/Delete -->
+        <EditText
+                android:id="@+id/visit_notes_noteIdTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Note ID (for update/delete)"
+                android:inputType="number"
+                android:padding="8dp"
+                app:layout_constraintTop_toBottomOf="@id/visit_notes_editNoteTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
         <!-- Buttons row -->
         <LinearLayout
                 android:id="@+id/buttons_row"
@@ -45,7 +58,7 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@id/visit_notes_editNoteTxt"
+                app:layout_constraintTop_toBottomOf="@id/visit_notes_noteIdTxt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
