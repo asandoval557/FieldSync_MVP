@@ -1,32 +1,46 @@
 ﻿name: Android CI
+
 on:
-  pull_request:
-    branches: [development, main]
   push:
-    branches: [development]
+    paths:
+      - 'android-app/**'
+      - '.github/workflows/android-ci.yml'
+  pull_request:
+    paths:
+      - 'android-app/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    defaults:
+      run:
+        working-directory: android-app   # ← run gradle inside android-app/
 
-      - name: Set up JDK 17
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 (Gradle runtime)
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: "17"
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install SDK components
+      - name: Install SDK packages
         run: |
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          sdkmanager --install "platform-tools" \
+                               "platforms;android-35" "build-tools;35.0.0" \
+                               "platforms;android-34" "build-tools;34.0.0"
 
       - name: Make gradlew executable
-        run: chmod +x android-app/gradlew
+        run: chmod +x gradlew
 
-      - name: Build (assembleDebug)
-        working-directory: android-app
-        run: ./gradlew clean assembleDebug --stacktrace
+      - name: Build Debug
+        env:
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}   # expose SDK to AGP
+        run: ./gradlew --no-daemon clean assembleDebug
+
