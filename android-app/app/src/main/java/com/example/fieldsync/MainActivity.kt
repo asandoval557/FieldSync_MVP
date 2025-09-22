@@ -24,7 +24,11 @@ class MainActivity : AppCompatActivity() {
       insets
     }
 
+<<<<<<< HEAD
     SetActiveFragment(MainMenu())
+=======
+    SetActiveFragment(LoginFragment())
+>>>>>>> visit-notes-integration
 
   }
 

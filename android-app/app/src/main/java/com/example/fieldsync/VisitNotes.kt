@@ -18,14 +18,17 @@ class VisitNotes : Fragment() {
     private var _binding: FragmentVisitNotesBinding? = null
     private val binding get() = _binding!!
 
-    // Hardcoded for prototype; later replace with CheckIn ID
-    private val visitId = 1
-    private val hardcodedNoteId = 1
+    private val prefs by lazy {
+        requireContext().getSharedPreferences("visits", android.content.Context.MODE_PRIVATE)
+    }
+
+    private val visitId: Int
+        get() = prefs.getInt("visit_id", -1)  // -1 means no active visit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentVisitNotesBinding.inflate(inflater, container, false)
 
         // CREATE (POST)
@@ -60,8 +63,8 @@ class VisitNotes : Fragment() {
                 .enqueue(object : Callback<List<Note>> {
                     override fun onResponse(call: Call<List<Note>>, response: Response<List<Note>>) {
                         if (response.isSuccessful) {
-                            val notes = response.body()?.joinToString("\n") {
-                                "ID: ${it.id}, ${it.body}"
+                            val notes = response.body()?.joinToString("\n\n") { note ->
+                                " ID: ${note.id}\n ${note.body}"
                             } ?: "No notes found"
                             binding.visitNotesResultTxt.text = notes
                         } else {
@@ -78,14 +81,17 @@ class VisitNotes : Fragment() {
         // UPDATE (PUT)
         binding.visitNotesUpdateBtn.setOnClickListener {
             val noteText = binding.visitNotesEditNoteTxt.text.toString()
-            if (noteText.isBlank()) {
-                Toast.makeText(requireContext(), "Note cannot be empty", Toast.LENGTH_SHORT).show()
+            val noteIdText = binding.visitNotesNoteIdTxt.text.toString()
+
+            if (noteText.isBlank() || noteIdText.isBlank()) {
+                Toast.makeText(requireContext(), "Enter Note ID and text to update", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            val noteId = noteIdText.toInt()
             val updatedNote = Note(visitId = visitId, body = noteText)
 
-            RetrofitClient.instance.updateNote(visitId, hardcodedNoteId, updatedNote)
+            RetrofitClient.instance.updateNote(visitId, noteId, updatedNote)
                 .enqueue(object : Callback<Note> {
                     override fun onResponse(call: Call<Note>, response: Response<Note>) {
                         if (response.isSuccessful) {
@@ -103,7 +109,15 @@ class VisitNotes : Fragment() {
 
         // DELETE (DELETE)
         binding.visitNotesDeleteBtn.setOnClickListener {
-            RetrofitClient.instance.deleteNote(visitId, hardcodedNoteId)
+            val noteIdText = binding.visitNotesNoteIdTxt.text.toString()
+            if (noteIdText.isBlank()) {
+                Toast.makeText(requireContext(), "Enter Note ID to delete", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val noteId = noteIdText.toInt()
+
+            RetrofitClient.instance.deleteNote(visitId, noteId)
                 .enqueue(object : Callback<Unit> {
                     override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                         if (response.isSuccessful) {
