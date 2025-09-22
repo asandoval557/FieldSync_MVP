@@ -229,18 +229,12 @@ ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL;
 INSERT INTO users (email, password_hash, full_name, phone) VALUES 
 ('demo@demo.com', 'hash_placeholder', 'Demo Johnson', '+5-555-5555');
 
+SELECT * FROM users WHERE email = 'demo@demo.com';
 
 --Sample data
+INSERT INTO stores (name, address, city, state, zip_code, phone, latitude, longitude, store_type, assigned_user_id) VALUES 
+('SuperMart Downtown', '123 Main St', 'Demotown', 'CA', '90210', '+5-555-5556', 0.00, 0.00, 'supermarket', '4146c3ea-10f9-45e7-b2ae-51e5941fe614'),
+('QuickStop Plaza', '456 Oak Ave', 'Placeholder City', 'CA', '90211', '+5-555-5557', 0.00, 0.00, 'convenience', '4146c3ea-10f9-45e7-b2ae-51e5941fe614'),
+('MegaStore West', '789 Pine Blvd', 'Mockville', 'CA', '90212', '+5-555-5558', 0.00, 0.00, 'big_box', '4146c3ea-10f9-45e7-b2ae-51e5941fe614');
 
-DO $$
-DECLARE
-    demo_user_id UUID;
-BEGIN
-    SELECT id INTO demo_user_id FROM users WHERE email = 'demo@demo.com';
-    
-    -- Insert sample stores
-    INSERT INTO stores (name, address, city, state, zip_code, phone, latitude, longitude, store_type, assigned_user_id) VALUES 
-    ('SuperMart Downtown', '123 Main St', 'Demotown', 'CA', '90210', '+5-555-5556', 0.00, 0.00, 'supermarket', demo_user_id),
-    ('QuickStop Plaza', '456 Oak Ave', 'Placeholder City', 'CA', '90211', '+5-555-5557', 0.00, 0.00, 'convenience', demo_user_id),
-    ('MegaStore West', '789 Pine Blvd', 'Mockville', 'CA', '90212', '+5-555-5558', 0.00, 0.00, 'big_box', demo_user_id);
-END $$;
+select * from stores;

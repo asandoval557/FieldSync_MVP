@@ -1,28 +1,34 @@
-﻿from contextlib import asynccontextmanager
-from fastapi import FastAPI
+﻿from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(title="FieldSync API", version="0.1.0")
+
+# Permissive CORS for dev/demo; tighten later
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --- Existing routes ---
 from .routes.auth import router as auth_router
-from .routes.note import router as notes_router
-from .routes.visit_history import router as visit_history_router
-from .db import Base, engine
-from .models import user
-import uvicorn
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
+# --- Peer branch: store routes (one of these may exist) ---
+stores_router = None
+try:
+    from .routes.stores import router as stores_router  # e.g., routes/stores.py
+except Exception:
+    try:
+        from .routes.store import router as stores_router   # e.g., routes/store.py
+    except Exception:
+        stores_router = None
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup logic
-    Base.metadata.create_all(bind=engine)
-    yield
-
-app = FastAPI(title="FieldSync API", version="0.1.0", lifespan=lifespan)
+if stores_router is not None:
+    app.include_router(stores_router, prefix="/stores", tags=["stores"])
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "fieldsync-api", "version": "0.1.0"}
-
-app.include_router(auth_router)
-app.include_router(notes_router)
-app.include_router(visit_history_router)
-
-if __name__ == "__main__":
-    uvicorn.run(app, reload=False)
+    return {"status": "ok"}
