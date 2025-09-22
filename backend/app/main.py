@@ -23,3 +23,6 @@ def health():
 app.include_router(auth_router)
 app.include_router(notes_router)
 app.include_router(visit_history_router)
+
+if __name__ == "__main__":
+    uvicorn.run(app, reload=False)

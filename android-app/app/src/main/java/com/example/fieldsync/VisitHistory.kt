@@ -27,8 +27,12 @@ class VisitHistory : Fragment(R.layout.fragment_visit_history) {
         // Inflate layout using ViewBinding
         _binding = FragmentVisitHistoryBinding.inflate(inflater, container, false)
 
+        binding.visitHistoryBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         val userId = UUID.fromString("f98f31a9-ab9f-416f-89b0-39531122b9a9")
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 binding.visitHistoryErrorTxt.text = "Loading..."
                 binding.visitHistoryErrorTxt.visibility = View.VISIBLE
@@ -47,12 +51,9 @@ class VisitHistory : Fragment(R.layout.fragment_visit_history) {
                 binding.visitHistoryErrorTxt.visibility = View.VISIBLE
                 Log.e("VisitHistory", "Failed to load visits", e)
             }
+
         }
 
-
-        binding.visitHistoryBackBtn.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
 
         return binding.root
     }
