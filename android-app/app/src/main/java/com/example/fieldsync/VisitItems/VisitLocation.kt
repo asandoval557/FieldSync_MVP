@@ -4,7 +4,7 @@ import java.util.*
 
 // Represents a scheduled visit to a store location
 data class VisitLocation(
-    val visit_id: UUID,
+    val visit_id: String?,
     val store_id: UUID,
     val store_name: String,
     val address: String,
