@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".VisitNotes">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+        <!-- Back Button -->
+        <ImageButton
+                android:id="@+id/visit_notes_backBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp" />
+
+        <!-- Title -->
+        <TextView
+                android:id="@+id/visit_notes_visitNotesTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visit Notes"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/visit_notes_backBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"/>
+
+        <!-- Notes input -->
+        <EditText
+                android:id="@+id/visit_notes_editNoteTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter note"
+                android:gravity="top"
+                app:layout_constraintTop_toBottomOf="@id/visit_notes_visitNotesTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:inputType="textMultiLine"
+                android:minHeight="100dp"
+                android:padding="8dp"
+                android:layout_marginTop="16dp"/>
+
+        <!-- Note ID input for Update/Delete -->
+        <EditText
+                android:id="@+id/visit_notes_noteIdTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Note ID (for update/delete)"
+                android:inputType="number"
+                android:padding="8dp"
+                app:layout_constraintTop_toBottomOf="@id/visit_notes_editNoteTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+        <!-- Buttons row -->
+        <LinearLayout
+                android:id="@+id/buttons_row"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/visit_notes_noteIdTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <Button
+                    android:id="@+id/visit_notes_submitBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add"/>
+
+            <Button
+                    android:id="@+id/visit_notes_getBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Get"/>
+
+            <Button
+                    android:id="@+id/visit_notes_updateBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Update"/>
+
+            <Button
+                    android:id="@+id/visit_notes_deleteBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Delete"/>
+        </LinearLayout>
+
+        <!-- Result output -->
+        <TextView
+                android:id="@+id/visit_notes_resultTxt"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:background="#EFEFEF"
+                android:scrollbars="vertical"
+                android:text="Results will appear here..."
+                app:layout_constraintTop_toBottomOf="@id/buttons_row"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

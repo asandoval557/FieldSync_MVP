@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="?android:selectableItemBackground">
+
+    <!-- Store Name -->
+    <TextView
+            android:id="@+id/store_storeNameTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Store Name"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Address -->
+    <TextView
+            android:id="@+id/store_storeAddressTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Store Location"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/store_storeNameTxt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Time Slot -->
+    <TextView
+            android:id="@+id/store_storeTimeTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Store Visit Time"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/store_storeAddressTxt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Status -->
+    <TextView
+            android:id="@+id/store_storeDurationTxt"
+            android:text="Store Visit Duration"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintTop_toBottomOf="@+id/store_storeTimeTxt"
+            android:layout_width="0dp"/>
+    <TextView
+            android:id="@+id/store_storeStatusTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upcoming"
+            android:textColor="@android:color/holo_green_dark"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/store_storeTimeTxt"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="20dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

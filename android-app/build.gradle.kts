@@ -1,1 +1,6 @@
-﻿tasks.register<Delete>("clean") { delete(layout.buildDirectory) }
+﻿buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
