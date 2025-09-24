@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import com.example.fieldsync.databinding.FragmentVisitNotesBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import java.util.Date
+import java.util.Locale
+
 
 data class Note(
     var id: String? = null,
@@ -87,7 +90,11 @@ class VisitNotes : Fragment() {
                         binding.visitNotesResultTxt.text = "No notes found for $currentStore"
                     } else {
                         binding.visitNotesResultTxt.text = notes.joinToString("\n\n") { note ->
-                            "Note ID: ${note.id}\nNote: ${note.body}"
+                            val date = java.text.SimpleDateFormat(
+                                "MMM d, yyyy h:mm a", Locale.getDefault()
+                            ).format(Date(note.timestamp))
+
+                            "Note ID: ${note.id}\nNote: ${note.body}\nCreated: $date"
                         }
                     }
                 }
@@ -95,6 +102,7 @@ class VisitNotes : Fragment() {
                     binding.visitNotesResultTxt.text = "Failed to load notes"
                 }
         }
+
 
         // UPDATE NOTE
         binding.visitNotesUpdateBtn.setOnClickListener {
