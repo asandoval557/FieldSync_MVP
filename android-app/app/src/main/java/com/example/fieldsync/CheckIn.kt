@@ -122,6 +122,8 @@ class CheckIn : Fragment(R.layout.fragment_check_in) {
                                 start = checkInTime?.toDate()?.time ?: 0L,
                                 end = 0L
                             )
+
+                            currentVisitId = visitId
                         }
                     } else {
                         // doc doesn't exist, clear local state
