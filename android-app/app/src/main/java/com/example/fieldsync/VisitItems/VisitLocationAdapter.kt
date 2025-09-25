@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fieldsync.databinding.ItemVisitLocationBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
 
 class VisitLocationAdapter(
-    private val visitLocations: List<VisitLocation>
+    private val visitLocations: List<Visit>
 ) : RecyclerView.Adapter<VisitLocationAdapter.VisitViewHolder>() {
 
     inner class VisitViewHolder(
@@ -41,68 +43,56 @@ class VisitLocationAdapter(
 
         val visit = visitLocations[position]
         with(holder.binding) {
-            storeStoreNameTxt.text = visit.store_name
-            storeStoreAddressTxt.text = visit.address
-            storeStoreTimeTxt.text = formatTimeRange(visit.check_in_time, visit.check_out_time)
-            storeStoreStatusTxt.text = visit.compliance_status
-            storeStoreDurationTxt.text = visit.duration_minutes?.let { convertMinutesToHHMM(it) }
+            storeStoreNameTxt.text = visit.StoreName
 
-            val statusColor = when (visit.compliance_status.lowercase()) {
-                "completed" -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_green_dark)
-                "upcoming" -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_orange_dark)
+            getStoreAddress(visit.StoreID, holder)
+
+            val formatter = SimpleDateFormat("MMM dd, yyyy h:mm a", Locale.getDefault())
+
+            val timeRange = if (visit.CheckIn != null && visit.CheckOut != null) {
+                "${formatter.format(visit.CheckIn.toDate())} - ${formatter.format( visit.CheckOut.toDate())}"
+            } else {
+                "Time not available"
+            }
+
+            storeStoreTimeTxt.text = timeRange
+            storeStoreStatusTxt.text = "Complete"
+
+            val duration = "Duration:  ${visit.VisitDuration}"
+            storeStoreDurationTxt.text = duration
+
+            // Change color depending on status
+            val statusColor = when (visit.Status.lowercase()) {
+                "checked_out" -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_green_dark)
+                "checked_in" -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_orange_dark)
                 else -> ContextCompat.getColor(holder.itemView.context, android.R.color.darker_gray)
             }
             storeStoreStatusTxt.setTextColor(statusColor)
         }
     }
 
-    // Formats a time range from UTC timestamps into local AM/PM display
-    private fun formatTimeRange(start: String, end: String?): String {
+   private fun getStoreAddress(storeID: Int, holder: VisitViewHolder) {
+        Firebase.firestore.collection("Store_Management")
+            .whereEqualTo("StoreID", storeID)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val doc = result.documents[0]
+                    val address = doc.getString("Address") ?: ""
+                    val city = doc.getString("City") ?: ""
+                    val state = doc.getString("State") ?: ""
+                    val fullAddress = "$address, $city, $state"
 
-        val parsedStart = parseFlexibleTimestamp(start)
-        val parsedEnd = end?.let { parseFlexibleTimestamp(it) }
-
-        val outputFormat = SimpleDateFormat("h:mm a", Locale.US)
-        outputFormat.timeZone = TimeZone.getDefault()
-
-
-        val startTime = parsedStart?.let { outputFormat.format(it) }
-        val endTime = parsedEnd?.let { outputFormat.format(it) }
-
-
-        return if (startTime != null && endTime != null) "$startTime - $endTime"
-        else if (startTime != null) "$startTime - ongoing"
-        else "—"
-    }
-
-    // Parses a timestamp string using multiple fallback formats to handle microseconds, milliseconds, or no fractional seconds
-    fun parseFlexibleTimestamp(timestamp: String): Date? {
-        val formats = listOf(
-            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", // microseconds
-            "yyyy-MM-dd'T'HH:mm:ss.SSS",    // milliseconds
-            "yyyy-MM-dd'T'HH:mm:ss"         // no fractional seconds
-        )
-
-        // Try each format until one succeeds
-        for (format in formats) {
-            try {
-                val sdf = SimpleDateFormat(format, Locale.US)
-                sdf.timeZone = TimeZone.getTimeZone("UTC")
-                return sdf.parse(timestamp)
-            } catch (_: Exception) {
-                // Ignore and try next format
+                    holder.binding.storeStoreAddressTxt.text = fullAddress
+                } else {
+                    holder.binding.storeStoreAddressTxt.text = "Address not found"
+                }
             }
-        }
+            .addOnFailureListener {
+                holder.binding.storeStoreAddressTxt.text = "Error loading address"
+                Log.e("VisitHistory", "Failed to fetch store address", it)
+            }
 
-        // Return null if none of the formats match
-        return null
-    }
-
-
-    fun convertMinutesToHHMM(totalMinutes: Int): String {
-        val hours = totalMinutes / 60
-        val minutes = totalMinutes % 60
-        return "${hours}:${minutes.toString().padStart(2, '0')}"
     }
 
 }

@@ -8,17 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fieldsync.VisitItems.VisitLocation
+import com.example.fieldsync.VisitItems.Visit
 import com.example.fieldsync.VisitItems.VisitLocationAdapter
 import com.example.fieldsync.api.RetrofitClient
 import com.example.fieldsync.databinding.FragmentVisitHistoryBinding
-import kotlinx.coroutines.launch
-import java.util.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class VisitHistory : Fragment(R.layout.fragment_visit_history) {
 
     private var _binding: FragmentVisitHistoryBinding? = null
     private val binding get() = _binding!!
+
+    // firebase constants
+    private companion object {
+        const val COLLECTION = "Visit_Check_In_Out"
+        const val STORE_COLLECTION = "Store_Management"
+        const val FIELD_STORE_ID = "StoreID"
+        const val FIELD_STORE_NAME = "StoreName"
+        const val FIELD_CHECK_IN = "CheckIn"
+        const val FIELD_CHECK_OUT = "CheckOut"
+        const val FIELD_VISIT_DURATION = "VisitDuration"
+        const val FIELD_VISIT_ID = "VisitID"
+        const val FIELD_STATUS = "Status"
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,28 +45,35 @@ class VisitHistory : Fragment(R.layout.fragment_visit_history) {
             parentFragmentManager.popBackStack()
         }
 
-        val userId = UUID.fromString("f98f31a9-ab9f-416f-89b0-39531122b9a9")
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                binding.visitHistoryErrorTxt.text = "Loading..."
-                binding.visitHistoryErrorTxt.visibility = View.VISIBLE
-                val visits = RetrofitClient.visitHistoryApi.getVisitHistory(userId)
-                binding.viewHistoryRecycleView.apply {
-                    layoutManager = LinearLayoutManager(requireContext())
-                    adapter = VisitLocationAdapter(visits)
-                    binding.visitHistoryErrorTxt.visibility = View.INVISIBLE
-                    if(visits.isEmpty()) {
-                        binding.visitHistoryErrorTxt.text = "No visits found"
-                        binding.visitHistoryErrorTxt.visibility = View.VISIBLE
+        binding.visitHistoryErrorTxt.visibility = View.INVISIBLE
+
+        binding.visitHistoryErrorTxt.text = "Loading..."
+        binding.visitHistoryErrorTxt.visibility = View.VISIBLE
+
+
+        Firebase.firestore.collection(COLLECTION)
+            .whereEqualTo(FIELD_STATUS, "checked_out")
+            //.whereEqualTo(, currentUserId)  // For user ID
+            .get()
+            .addOnSuccessListener { result ->
+                val visits = result.documents.mapNotNull { it.toObject(Visit::class.java) }
+                if (visits.isEmpty()) {
+                    binding.visitHistoryErrorTxt.text = "No visits found"
+                    binding.visitHistoryErrorTxt.visibility = View.VISIBLE
+                }
+                else {
+                    binding.viewHistoryRecycleView.apply {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter = VisitLocationAdapter(visits)
+                        binding.visitHistoryErrorTxt.visibility = View.INVISIBLE
                     }
                 }
-            } catch (e: Exception) {
-                binding.visitHistoryErrorTxt.text = "Failed to retrieve past visits"
-                binding.visitHistoryErrorTxt.visibility = View.VISIBLE
-                Log.e("VisitHistory", "Failed to load visits", e)
             }
-
-        }
+            .addOnFailureListener {
+                binding.visitHistoryErrorTxt.text = "Failed to load visits!"
+                binding.visitHistoryErrorTxt.visibility = View.VISIBLE
+                Log.e("VisitHistory", "Failed to load visits", it)
+            }
 
 
         return binding.root
