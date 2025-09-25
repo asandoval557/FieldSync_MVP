@@ -96,29 +96,6 @@ class VisitNotes : Fragment() {
                     }
         }
 
-                    /*val notesRef = db.collection("stores")
-                .document(currentStore!!)
-                .collection("notes")*/
-
-                    /*notesRef.get().addOnSuccessListener { snapshot ->
-
-
-                val newNote = Note(
-                    id = nextId,
-                    store = currentStore,
-                    body = noteText
-                )
-
-                notesRef.document(nextId).set(newNote)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Note added with ID $nextId", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(requireContext(), "Error adding note", Toast.LENGTH_SHORT).show()
-                    }
-            }*/
-
-
 
         // GET NOTES
         binding.visitNotesGetBtn.setOnClickListener {
@@ -168,11 +145,6 @@ class VisitNotes : Fragment() {
                 return@setOnClickListener
             }
 
-            /*if (!noteId.all { it.isDigit() } || noteId.toInt() <= 0) {
-                Toast.makeText(requireContext(), "Note ID must be a positive number", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }*/
-
             db.collection("Visit_Notes")
                 .whereEqualTo("visitId", currentVisitId)
                 .whereEqualTo("id", noteId)
@@ -209,11 +181,6 @@ class VisitNotes : Fragment() {
                 Toast.makeText(requireContext(), "Enter Note ID to delete", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            /*if (!noteId.all { it.isDigit() } || noteId.toInt() <= 0) {
-                Toast.makeText(requireContext(), "Note ID must be a positive number", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }*/
 
             db.collection("Visit_Notes")
                 .whereEqualTo("visitId", currentVisitId)
