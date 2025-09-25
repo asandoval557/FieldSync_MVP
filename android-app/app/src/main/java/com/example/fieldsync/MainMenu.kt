@@ -36,9 +36,10 @@ class MainMenu : Fragment(R.layout.fragment_main_menu) {
 
         binding.mainMenuVisitNotesBtn.setOnClickListener {
             val prefs = requireContext().getSharedPreferences("visits", Context.MODE_PRIVATE)
-            val isCheckedIn = prefs.getBoolean("checked_in", false)
+            val visitId = VisitUtil.getCurrentVisitId(requireContext())
+            val storeName = prefs.getString("current_store_name", null)
 
-            if (isCheckedIn) {
+            if (visitId != null && !storeName.isNullOrEmpty()) {
                 val activity = activity as MainActivity?
                 activity?.SetActiveFragment(VisitNotes())
             } else {
