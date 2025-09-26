@@ -64,11 +64,12 @@ class VisitNotes : Fragment() {
                 return@setOnClickListener
             }
 
-
+            // Count only notes for this store to make sequential IDs per store
             db.collection("Visit_Notes")
+                .whereEqualTo("storeId", currentStoreId)
                 .get()
                 .addOnSuccessListener { allNotesSnapshot ->
-                    val noteId = (allNotesSnapshot.size() + 1).toString() // sequential numeric ID
+                    val noteId = (allNotesSnapshot.size() + 1).toString()
 
                     val newNote = Note(
                         id = noteId,
@@ -79,21 +80,21 @@ class VisitNotes : Fragment() {
                         timestamp = System.currentTimeMillis()
                     )
 
+                    // Namespaced doc id to avoid clashes across stores
                     db.collection("Visit_Notes")
-                        .document(noteId)
+                        .document("${currentStoreId}_${noteId}")
                         .set(newNote)
                         .addOnSuccessListener {
                             Toast.makeText(requireContext(), "Note added with ID $noteId", Toast.LENGTH_SHORT).show()
                             binding.visitNotesEditNoteTxt.text?.clear()
                         }
                         .addOnFailureListener { e ->
-                            Toast.makeText(requireContext(), "Error adding note: ${e.message}", Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(requireContext(), "Error adding note: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                 }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "Error getting note count: ${e.message}", Toast.LENGTH_SHORT)
-                    }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Error getting note count: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
 
                     /*val notesRef = db.collection("stores")
@@ -123,7 +124,8 @@ class VisitNotes : Fragment() {
         // GET NOTES
         binding.visitNotesGetBtn.setOnClickListener {
             db.collection("Visit_Notes")
-                .whereEqualTo("visitId", currentVisitId)
+                .whereEqualTo("storeId", currentStoreId)                      // ← filter by StoreID
+                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { snapshot ->
                     val notes = snapshot.documents.mapNotNull { doc ->
@@ -136,24 +138,23 @@ class VisitNotes : Fragment() {
                                 body = doc.getString("body") ?: "",
                                 timestamp = doc.getLong("timestamp") ?: System.currentTimeMillis()
                             )
-                        } catch (e: Exception) {
-                            null
-                        }
+                        } catch (_: Exception) { null }
                     }
-                    if (notes.isEmpty()) {
-                        binding.visitNotesResultTxt.text = "No notes found for $currentStoreName"
-                    } else {
-                        binding.visitNotesResultTxt.text = notes.joinToString("\n\n") { note ->
-                            val date = java.text.SimpleDateFormat(
-                                "MMM d, yyyy h:mm a", Locale.getDefault()
-                            ).format(Date(note.timestamp))
 
-                            "Note ID: ${note.id}\nNote: ${note.body}\nCreated: $date"
+                    binding.visitNotesResultTxt.text =
+                        if (notes.isEmpty()) {
+                            "No notes found for $currentStoreName"
+                        } else {
+                            notes.joinToString("\n\n") { note ->
+                                val date = java.text.SimpleDateFormat(
+                                    "MMM d, yyyy h:mm a", Locale.getDefault()
+                                ).format(Date(note.timestamp))
+                                "Note ID: ${note.id}\nNote: ${note.body}\nCreated: $date"
+                            }
                         }
-                    }
                 }
-                .addOnFailureListener {
-                    binding.visitNotesResultTxt.text = "Failed to load notes"
+                .addOnFailureListener { e ->
+                    binding.visitNotesResultTxt.text = "Failed to load notes: ${e.message}"
                 }
         }
 
