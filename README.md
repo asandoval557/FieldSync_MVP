@@ -30,6 +30,13 @@ FieldSync solves the inefficiency facing field account managers who must track v
 - **Visit Notes** — text notes per visit
 - **Visit History** — past visits with timestamps & duration
 
+## BETA Features (Android-only)
+- **Login Authentication** — Password Reset/Register New User (Requires new fragment for new users input)
+- **Photo's Added to Store Management** — Show latest photo of a location in the Store Management section
+- **Add/Remove Stores from Store Management** — Allow users to request/remove new location to be added to their store list (Requires new fragment to add locations and request to remove locations from user store list)
+- **GPS Check-In/Out** — Check in/out incorporate GPS location data for check-in and check-out
+- **Sales Data Feature** — Show sales data for current month
+
 _Planned next: offline mode + sync, admin console, reporting, iOS client._
 
 ---
