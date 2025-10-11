@@ -107,8 +107,8 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
         class VH(view: View) : RecyclerView.ViewHolder(view) {
             val image: ImageView = view.findViewById(R.id.storeImage)
-            val title: TextView = view.findViewById(R.id.storeTitle)
-            val subtitle: TextView = view.findViewById(R.id.storeSubtitle)
+            val title: TextView = view.findViewById(R.id.item_storeManagement_titleTxt)
+            val subtitle: TextView = view.findViewById(R.id.item_storeManagement_subtitleTxt)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
