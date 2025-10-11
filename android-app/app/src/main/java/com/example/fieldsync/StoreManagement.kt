@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
@@ -105,13 +106,14 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
         RecyclerView.Adapter<StoreAdapter.VH>() {
 
         class VH(view: View) : RecyclerView.ViewHolder(view) {
-            val title: TextView = view.findViewById(android.R.id.text1)
-            val subtitle: TextView = view.findViewById(android.R.id.text2)
+            val image: ImageView = view.findViewById(R.id.storeImage)
+            val title: TextView = view.findViewById(R.id.storeTitle)
+            val subtitle: TextView = view.findViewById(R.id.storeSubtitle)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             val v = LayoutInflater.from(parent.context)
-                .inflate(android.R.layout.simple_list_item_2, parent, false)
+                .inflate(R.layout.item_store_management, parent, false)
             return VH(v)
         }
 
@@ -120,6 +122,8 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
             val idPrefix = item.storeId?.let { "ID $it – " } ?: ""
             holder.title.text = idPrefix + item.title
             holder.subtitle.text = item.subtitle
+
+            // Need to Bind image
         }
 
         override fun getItemCount(): Int = items.size

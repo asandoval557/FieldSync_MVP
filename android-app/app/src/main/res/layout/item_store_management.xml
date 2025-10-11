@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content">
+    <ImageView
+            android:id="@+id/storeImage"
+            android:layout_width="88dp"
+            android:layout_height="73dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@drawable/ic_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="21dp" android:layout_marginEnd="302dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/storeSubtitle"/>
+    <TextView
+            android:id="@+id/storeTitle"
+            android:layout_width="366dp"
+            android:layout_height="48dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="28dp" android:layout_marginEnd="21dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"/>
+    <TextView
+            android:id="@+id/storeSubtitle"
+            android:layout_width="367dp"
+            android:layout_height="44dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp" android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/storeTitle"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
