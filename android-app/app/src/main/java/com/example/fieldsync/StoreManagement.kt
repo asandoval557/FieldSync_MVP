@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fieldsync.databinding.FragmentStoreManagementBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import android.widget.EditText
+import android.widget.ImageButton
+import android.app.AlertDialog
 
 class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
@@ -31,6 +34,7 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
     // UI item (no VisitLocation)
     data class StoreItem(
+        val documentId: String,    // Firestore doc id for deletion
         val storeId: Long?,        // may be null if missing
         val title: String,         // Store Name
         val subtitle: String       // "Address, City, State"
@@ -50,15 +54,172 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
         binding.visitRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = StoreAdapter(emptyList())
+            adapter = StoreAdapter(emptyList(),
+                onDeleteClick = { store -> confirmDeleteStore(store) }
+            )
         }
 
         binding.storeManagementBackBtn.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
+        // add store button
+        binding.storeManagementAddBtn.setOnClickListener {
+            showAddStoreDialog()
+        }
+
         fetchStores()
         return binding.root
+    }
+
+
+    private fun showAddStoreDialog() {
+        val dialogView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.dialog_add_store, null)
+
+        val storeNameInput = dialogView.findViewById<EditText>(R.id.dialog_store_name_input)
+        val addressInput = dialogView.findViewById<EditText>(R.id.dialog_address_input)
+        val cityInput = dialogView.findViewById<EditText>(R.id.dialog_city_input)
+        val stateInput = dialogView.findViewById<EditText>(R.id.dialog_state_input)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Add New Store")
+            .setView(dialogView)
+            .setPositiveButton("Add") { _, _ ->
+                val storeName = storeNameInput.text.toString().trim()
+                val address = addressInput.text.toString().trim()
+                val city = cityInput.text.toString().trim()
+                val state = stateInput.text.toString().trim()
+
+                if (storeName.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "All fields are required",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setPositiveButton
+                }
+
+                generateNextStoreIdAndAdd(storeName, address, city, state)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun generateNextStoreIdAndAdd(
+        storeName: String,
+        address: String,
+        city: String,
+        state: String
+    ) {
+        Firebase.firestore.collection(COLLECTION)
+            .orderBy(FIELD_STORE_ID, com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val nextStoreId = if (snapshot.isEmpty) {
+                    1L //start from 1 if no store exists
+                } else {
+                    val lastStoreId = snapshot.documents[0].getLong(FIELD_STORE_ID) ?: 0L
+                    lastStoreId + 1
+                }
+                addStoreToFirestore(nextStoreId, storeName, address, city, state)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    requireContext(),
+                    "Error generating Store ID: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
+    private fun addStoreToFirestore(
+        storeId: Long,
+        storeName: String,
+        address: String,
+        city: String,
+        state: String
+    ) {
+        // check if store id already exists
+        Firebase.firestore.collection(COLLECTION)
+            .whereEqualTo(FIELD_STORE_ID, storeId)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (!snapshot.isEmpty) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Store ID $storeId already exists",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addOnSuccessListener
+                }
+
+                val storeData = hashMapOf(
+                    FIELD_STORE_ID to storeId,
+                    FIELD_STORE_NAME to storeName,
+                    FIELD_ADDRESS to address.ifEmpty { null },
+                    FIELD_CITY to city.ifEmpty { null },
+                    FIELD_STATE to state.ifEmpty { null }
+                )
+
+                Firebase.firestore.collection(COLLECTION)
+                    .add(storeData)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            requireContext(),
+                            "Store added successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        fetchStores()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to add store ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    requireContext(),
+                    "Error checking store ID: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
+
+    private fun confirmDeleteStore(store: StoreItem) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Store")
+            .setMessage("Are you sure you want to delete this store ?")
+            .setPositiveButton("Yes") { _, _ ->
+                deleteStoreFromFirestore(store)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteStoreFromFirestore(store: StoreItem) {
+        Firebase.firestore.collection(COLLECTION)
+            .document(store.documentId)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(
+                    requireContext(),
+                    "Store deleted successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+                fetchStores()
+            }
+            .addOnFailureListener { e ->
+            Toast.makeText(
+                requireContext(),
+                "Failed to delete store ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun fetchStores() {
@@ -82,6 +243,7 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
                         .joinToString(", ")
 
                     StoreItem(
+                        documentId = doc.id,
                         storeId = storeId,
                         title = name,
                         subtitle = subtitle
@@ -101,17 +263,20 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
     }
 
     // Minimal inline adapter
-    private class StoreAdapter(private var items: List<StoreItem>) :
+    private class StoreAdapter(
+        private var items: List<StoreItem>,
+        private val onDeleteClick: (StoreItem) -> Unit) :
         RecyclerView.Adapter<StoreAdapter.VH>() {
 
         class VH(view: View) : RecyclerView.ViewHolder(view) {
             val title: TextView = view.findViewById(android.R.id.text1)
             val subtitle: TextView = view.findViewById(android.R.id.text2)
+            val deleteBtn: ImageButton = view.findViewById(R.id.store_delete_btn)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             val v = LayoutInflater.from(parent.context)
-                .inflate(android.R.layout.simple_list_item_2, parent, false)
+                .inflate(R.layout.item_store_with_delete, parent, false)
             return VH(v)
         }
 
@@ -120,6 +285,9 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
             val idPrefix = item.storeId?.let { "ID $it – " } ?: ""
             holder.title.text = idPrefix + item.title
             holder.subtitle.text = item.subtitle
+            holder.deleteBtn.setOnClickListener {
+                onDeleteClick(item)
+            }
         }
 
         override fun getItemCount(): Int = items.size
