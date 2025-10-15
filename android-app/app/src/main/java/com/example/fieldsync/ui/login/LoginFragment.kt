@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        // Text watcher for real-time validation
+
         val afterTextChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -109,24 +109,27 @@ class LoginFragment : Fragment() {
         }
 
         // Forgot Password link click
-       /* forgotPasswordLink.setOnClickListener {
+        forgotPasswordLink.setOnClickListener {
             (requireActivity() as MainActivity).SetActiveFragment(ForgotPasswordFragment())
-        }*/
+
+        }
+
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome) + " " + model.displayName
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
+        private fun updateUiWithUser(model: LoggedInUserView) {
+            val welcome = getString(R.string.welcome) + " " + model.displayName
+            val appContext = context?.applicationContext ?: return
+            Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
+        }
+
+        private fun showLoginFailed(@StringRes errorString: Int) {
+            val appContext = context?.applicationContext ?: return
+            Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
+        }
+
+        override fun onDestroyView() {
+            super.onDestroyView()
+            _binding = null
+        }
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-}

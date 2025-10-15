@@ -23,6 +23,17 @@
                 android:paddingBottom="16dp" />
 
         <EditText
+                android:id="@+id/signUpUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:inputType="textPersonName"
+                android:autofillHints="name"
+                android:imeOptions="actionNext"
+                android:paddingBottom="12dp" />
+
+
+        <EditText
                 android:id="@+id/signUpEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
