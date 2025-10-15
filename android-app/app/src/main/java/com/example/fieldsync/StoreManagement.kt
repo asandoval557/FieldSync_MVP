@@ -1,20 +1,26 @@
 package com.example.fieldsync
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.fieldsync.databinding.FragmentStoreManagementBinding
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.io.File
 
 class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
@@ -105,6 +111,7 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
     private class StoreAdapter(private var items: List<StoreItem>) :
         RecyclerView.Adapter<StoreAdapter.VH>() {
 
+
         class VH(view: View) : RecyclerView.ViewHolder(view) {
             val image: ImageView = view.findViewById(R.id.storeImage)
             val title: TextView = view.findViewById(R.id.item_storeManagement_titleTxt)
@@ -123,7 +130,8 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
             holder.title.text = idPrefix + item.title
             holder.subtitle.text = item.subtitle
 
-            // Need to Bind image
+            // Binds latest photo holder.image
+            loadRecentPhoto(item, holder.image, holder.image.context)
         }
 
         override fun getItemCount(): Int = items.size
@@ -132,5 +140,40 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
             items = newItems
             notifyDataSetChanged()
         }
+
+        private fun loadRecentPhoto(item: StoreManagement.StoreItem, imageView: ImageView, context: Context) {
+            Firebase.firestore.collection("Visit_Photos")
+                .whereEqualTo("StoreID", item.storeId)
+                .orderBy("Timestamp", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val doc = documents.first()
+                        val photoPath = doc.getString("PhotoPath")
+                        if (photoPath != null) {
+                            displayLocalPhoto(photoPath, imageView, context)
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("PhotoFetch", "Error fetching photo metadata", e)
+                }
+
+        }
+
+        fun displayLocalPhoto(path: String, imageView: ImageView, context: Context) {
+            val file = File(path)
+            if (file.exists()) {
+                Glide.with(context)
+                    .load(file)
+                    .into(imageView)
+            } else {
+                Toast.makeText(context, "Could not find photos!", Toast.LENGTH_SHORT).show()
+                Log.e("PhotoDisplay", "File not found: $path")
+            }
+        }
+
     }
+
 }
