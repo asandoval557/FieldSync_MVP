@@ -89,5 +89,9 @@ dependencies {
   implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
   implementation("com.google.firebase:firebase-firestore-ktx")
   implementation("com.google.firebase:firebase-storage-ktx")
+  implementation("com.google.firebase:firebase-auth-ktx")
+  implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+  implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
 }
 
