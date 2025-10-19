@@ -277,8 +277,6 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
 
         class VH(view: View) : RecyclerView.ViewHolder(view) {
-            val title: TextView = view.findViewById(android.R.id.text1)
-            val subtitle: TextView = view.findViewById(android.R.id.text2)
             val deleteBtn: ImageButton = view.findViewById(R.id.store_delete_btn)
             val image: ImageView = view.findViewById(R.id.storeImage)
             val title: TextView = view.findViewById(R.id.item_storeManagement_titleTxt)
@@ -287,7 +285,6 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             val v = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_store_with_delete, parent, false)
                 .inflate(R.layout.item_store_management, parent, false)
             return VH(v)
         }
