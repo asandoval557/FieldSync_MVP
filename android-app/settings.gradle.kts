@@ -3,6 +3,7 @@
     gradlePluginPortal()
     google()
     mavenCentral()
+    maven("https://jitpack.io")
   }
 }
 dependencyResolutionManagement {
@@ -10,6 +11,7 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
+    maven("https://jitpack.io")
   }
 }
 rootProject.name = "FieldSync"   // keep your current name if different

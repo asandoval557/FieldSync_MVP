@@ -143,6 +143,8 @@ class PhotoCapture : Fragment() {
         savePhotoMetadataToFirestore(photoFile)
     }
 
+
+
     private fun savePhotoMetadataToFirestore(photoFile: File) {
         val visit = currentVisitContext()
         if (visit == null) {

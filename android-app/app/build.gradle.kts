@@ -2,6 +2,7 @@
   id("com.android.application")
   kotlin("android")
   id("com.google.gms.google-services")
+
 }
 
 android {
@@ -79,7 +80,9 @@ dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
 
+  implementation("com.github.bumptech.glide:glide:4.16.0")
 
+  implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
   testImplementation("junit:junit:4.13.2")
@@ -89,5 +92,9 @@ dependencies {
   implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
   implementation("com.google.firebase:firebase-firestore-ktx")
   implementation("com.google.firebase:firebase-storage-ktx")
+  implementation("com.google.firebase:firebase-auth-ktx")
+  implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+  implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
 }
 

@@ -1,33 +1,30 @@
 package com.example.fieldsync.data
 
 import com.example.fieldsync.data.model.LoggedInUser
-import java.util.UUID
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 
 class LoginDataSource {
 
-    companion object {
-        // MVP default credentials (change if you want)
-        const val DEFAULT_EMAIL = "test@example.com"
-        const val DEFAULT_PASSWORD = "Passw0rd!"
-    }
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    // Real Firebase sign in
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
         return try {
-            if (username.equals(DEFAULT_EMAIL, ignoreCase = true) && password == DEFAULT_PASSWORD) {
-                val fakeUser = LoggedInUser(
-                    userId = UUID.randomUUID().toString(),
-                    displayName = "FieldSync User"
-                )
-                Result.Success(fakeUser)
-            } else {
-                Result.Error(Exception("Invalid credentials"))
-            }
+            val result = auth.signInWithEmailAndPassword(username, password).await()
+            val user = result.user ?: return Result.Error(Exception("Authentication failed"))
+
+            val loggedInUser = LoggedInUser(
+                userId = user.uid,
+                displayName = user.email ?: "FieldSync User"
+            )
+            Result.Success(loggedInUser)
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
     fun logout() {
-        // No-op in fake auth
+        auth.signOut()
     }
 }

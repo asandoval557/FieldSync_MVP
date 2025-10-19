@@ -7,6 +7,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.fieldsync.databinding.ActivityMainBinding
 import com.example.fieldsync.ui.login.LoginFragment
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +15,9 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    // Initialize Firebase manually (safe even if already initialized)
+    FirebaseApp.initializeApp(this)
 
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
@@ -24,26 +28,22 @@ class MainActivity : AppCompatActivity() {
       insets
     }
 
-
-    SetActiveFragment(LoginFragment())
-
-
+    // Check if user is already signed in
+    val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+    if (currentUser != null) {
+      // Go straight to MainMenu if already logged in
+      SetActiveFragment(com.example.fieldsync.MainMenu())
+    } else {
+      // Otherwise, go to Login
+      SetActiveFragment(LoginFragment())
+    }
   }
 
   // Swaps Main with a new fragment
-  public fun SetActiveFragment(fragment: Fragment) {
-    // lets you perform actions on fragments
+  fun SetActiveFragment(fragment: Fragment) {
     val transaction = supportFragmentManager.beginTransaction()
-
-    // replaces main with new fragment
     transaction.replace(R.id.main, fragment)
-
       .addToBackStack(null)
-
-    // Applies operation performed on fragment
-    transaction.commit()
+      .commit()
   }
 }
-
-
-
