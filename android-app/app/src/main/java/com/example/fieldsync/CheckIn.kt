@@ -9,36 +9,17 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.fieldsync.databinding.FragmentCheckInBinding
-import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import com.google.firebase.Timestamp
 
-// MPAndroidChart
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-
-// Step 2: ViewModel + model from Step 1
-import com.example.fieldsync.salesmock.CheckInSalesViewModel
-import com.example.fieldsync.salesmock.SalesPoint
-
-class CheckIn : Fragment() { // ← inflate with binding (no layout in constructor)
+class CheckIn : Fragment(R.layout.fragment_check_in) {
 
     private var _binding: FragmentCheckInBinding? = null
     private val binding get() = _binding!!
-
-    private val salesVm: CheckInSalesViewModel by viewModels()
 
     // firebase constants
     private companion object {
@@ -52,7 +33,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         const val FIELD_VISIT_ID = "VisitID"
         const val FIELD_STATUS = "Status" // "checked_in" or "checked_out"
 
-        // store management fields
+        //store management fields
         const val STORE_FIELD_STORE_ID = "StoreID"
         const val STORE_FIELD_STORE_NAME = "Store Name"
     }
@@ -67,6 +48,8 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
     private var selectedStoreId: Long? = null
     private var selectedStoreName: String? = ""
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,14 +57,14 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
     ): View {
         _binding = FragmentCheckInBinding.inflate(inflater, container, false)
 
-        // insets handling
+        // keep your insets handling
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(sys.left, sys.top, sys.right, sys.bottom)
             insets
         }
 
-        // get store info from args (from StoreManagement)
+        // get store info from args, from StoreManagement
         arguments?.let { args ->
             selectedStoreId = args.getLong("storeID", -1L).takeIf { it != -1L }
             selectedStoreName = args.getString("storeName")
@@ -90,69 +73,22 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         restoreState()
         checkForActiveVisit()
 
-        // Buttons
-        binding.checkInCheckInBtn.setOnClickListener { performCheckIn() }
-        binding.checkInCheckOutBtn.setOnClickListener { performCheckOut() }
-        binding.checkInBackBtn.setOnClickListener { parentFragmentManager.popBackStack() }
-
-        // Sales card wiring via ViewModel
-        setupSalesChart(binding.salesChart)
-
-        // Always collect — even if no storeId yet
-        viewLifecycleOwner.lifecycleScope.launch {
-            salesVm.series.collectLatest { points ->
-                renderSales(binding.salesChart, points)
-                binding.salesCard.visibility = if (points.isEmpty()) View.GONE else View.VISIBLE
-            }
+        // CHECK IN
+        binding.checkInCheckInBtn.setOnClickListener {
+            performCheckIn()
         }
 
-        // Optionally load initial data if store already known
-        val storeIdForChart = VisitUtil.getCurrentStoreId(requireContext()) ?: selectedStoreId
-        if (storeIdForChart != null) {
-            salesVm.loadForStore(storeIdForChart)
-        } else {
-            binding.salesCard.visibility = View.GONE
+        // CHECK OUT
+        binding.checkInCheckOutBtn.setOnClickListener {
+            performCheckOut()
+        }
+
+        binding.checkInBackBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         return binding.root
     }
-
-    // Sales chart helpers
-
-    private fun setupSalesChart(chart: LineChart) {
-        chart.description.isEnabled = false
-        chart.legend.isEnabled = false
-        chart.axisRight.isEnabled = false
-        chart.axisLeft.setDrawGridLines(false)
-        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        chart.xAxis.setDrawGridLines(false)
-        chart.setTouchEnabled(true)
-        chart.setPinchZoom(false)
-    }
-
-    private fun renderSales(chart: LineChart, points: List<SalesPoint>) {
-        if (points.isEmpty()) {
-            chart.data = null
-            chart.invalidate()
-            return
-        }
-
-        val entries = points.mapIndexed { idx, p -> Entry(idx.toFloat(), p.units.toFloat()) }
-        val set = LineDataSet(entries, "Sales").apply {
-            setDrawCircles(false)
-            lineWidth = 2f
-            setDrawValues(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-        }
-        chart.data = LineData(set)
-
-        val sdf = SimpleDateFormat("MM/dd", Locale.getDefault())
-        val labels = points.map { sdf.format(it.date) }
-        chart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        chart.xAxis.labelCount = 6
-        chart.invalidate()
-    }
-
 
     private fun restoreState() {
         currentVisitDocumentId = prefs.getString("current_visit_doc_id", null)
@@ -173,6 +109,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                     if (document.exists()) {
                         val status = document.getString(FIELD_STATUS)
                         if (status == "checked_in") {
+                            // we have an active visit
                             val checkInTime = document.getTimestamp(FIELD_CHECK_IN)
                             val storeName = document.getString(FIELD_STORE_NAME) ?: ""
                             val storeId = document.getLong(FIELD_STORE_ID) ?: 0L
@@ -185,12 +122,11 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                                 start = checkInTime?.toDate()?.time ?: 0L,
                                 end = 0L
                             )
-                            currentVisitId = visitId
 
-                            // refresh chart once we confirm store context
-                            salesVm.loadForStore(storeId)
+                            currentVisitId = visitId
                         }
                     } else {
+                        // doc doesn't exist, clear local state
                         clearLocalVisitState()
                     }
                 }
@@ -210,7 +146,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         }
 
         val storeId = storeIdText.toLongOrNull()
-        if (storeId == null) {
+        if(storeId == null) {
             Toast.makeText(requireContext(), "Please enter a valid store ID.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -260,11 +196,8 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                             start = checkInTime.toDate().time,
                             end = 0L
                         )
-
-                        // refresh chart with this store
-                        salesVm.loadForStore(storeId)
                     }
-                    .addOnFailureListener { e ->
+                    .addOnFailureListener {e ->
                         Toast.makeText(requireContext(), "Check-in failed: ${e.message}", Toast.LENGTH_LONG).show()
                     }
             }
@@ -275,6 +208,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
 
     private fun performCheckOut() {
         val docId = currentVisitDocumentId
+
         if (docId == null) {
             Toast.makeText(requireContext(), "You're not checked in.", Toast.LENGTH_SHORT).show()
             return
@@ -282,6 +216,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
 
         val checkOutTime = Timestamp.now()
 
+        // first get current doc to calculate duration
         Firebase.firestore.collection(COLLECTION)
             .document(docId)
             .get()
@@ -290,11 +225,13 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                     val checkInTime = document.getTimestamp(FIELD_CHECK_IN)
                     val storeName = document.getString(FIELD_STORE_NAME) ?: ""
                     val storeId = document.getLong(FIELD_STORE_ID) ?: 0L
+                    val visitId = document.getLong(FIELD_VISIT_ID) ?: 0L
 
                     if (checkInTime != null) {
                         val durationMs = checkOutTime.toDate().time - checkInTime.toDate().time
                         val durationMinutes = durationMs / (1000 * 60)
 
+                        //update doc with check out info
                         val updates = hashMapOf<String, Any>(
                             FIELD_CHECK_OUT to checkOutTime,
                             FIELD_VISIT_DURATION to durationMinutes,
@@ -314,18 +251,14 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                                     end = checkOutTime.toDate().time
                                 )
                                 clearLocalVisitState()
-
-
-                                // salesVm.clear()
-                                // binding.salesCard.visibility = View.GONE
                             }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(requireContext(), "Check-out failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            .addOnFailureListener {e ->
+                            Toast.makeText(requireContext(), "Check-out failed: ${e.message}", Toast.LENGTH_SHORT).show()
                             }
                     }
                 }
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {e ->
                 Toast.makeText(requireContext(), "Error retrieving visits ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
@@ -374,16 +307,3 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
     }
 }
 
-class VisitUtil {
-    companion object {
-        fun getCurrentVisitId(context: Context): Long? {
-            val prefs = context.getSharedPreferences("visits", Context.MODE_PRIVATE)
-            return prefs.getLong("current_visit_id", -1L).takeIf { it != -1L }
-        }
-
-        fun getCurrentStoreId(context: Context): Long? {
-            val prefs = context.getSharedPreferences("visits", Context.MODE_PRIVATE)
-            return prefs.getLong("current_store_id", -1L).takeIf { it != -1L }
-        }
-    }
-}
