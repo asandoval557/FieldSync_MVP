@@ -12,8 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -91,12 +90,6 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         // Initialize location services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        // Keep your insets handling
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(sys.left, sys.top, sys.right, sys.bottom)
-            insets
-        }
 
         // Initialize coordinate labels
         setCoordLabels(null, null)
@@ -110,10 +103,18 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         restoreState()
         checkForActiveVisit()
 
+        binding.checkInToolbar.apply {
+            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+
+            }
+        }
+
+
         // Buttons
         binding.checkInCheckInBtn.setOnClickListener { performCheckIn() }
         binding.checkInCheckOutBtn.setOnClickListener { performCheckOut() }
-        binding.checkInBackBtn.setOnClickListener { parentFragmentManager.popBackStack() }
 
         // Sales card wiring via ViewModel
         setupSalesChart(binding.salesChart)
