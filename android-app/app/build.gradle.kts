@@ -96,6 +96,8 @@ dependencies {
   implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
   implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
   implementation("com.google.android.gms:play-services-location:21.3.0")
+  implementation ("com.google.android.material:material:1.11.0")// or newer
+
 
 
 }

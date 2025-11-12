@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_500">#6200EE</color>
-    <color name="purple_700">#3700B3</color>
-    <color name="teal_200">#03DAC5</color>
+    <!-- Core brand colors (reusing the default names) -->
+    <color name="purple_500">#4DE1C7</color>     <!-- Primary -->
+    <color name="purple_700">#071C42</color>     <!-- Primary Dark -->
+    <color name="teal_200">#F54B46</color>      <!-- Accent -->
+
+    <!-- Extra colors from the style tile -->
+    <color name="fs_surface">#FFFFFF</color>
+    <color name="fs_surface_alt">#F5F7F9</color>
+    <color name="fs_border">#E0E0E0</color>
+
+    <color name="fs_text_primary">#101908</color>
+    <color name="fs_text_secondary">#99071C42</color> <!-- Navy with some transparency -->
+
+    <color name="fs_success">#20C997</color>
+    <color name="fs_warning">#FFB020</color>
+    <color name="fs_error">#F54B46</color>
 </resources>
