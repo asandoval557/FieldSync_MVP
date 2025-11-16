@@ -60,6 +60,52 @@
                 android:imeOptions="actionDone"
                 android:paddingTop="12dp" />
 
+        <!-- Privacy Policy and Terms Checkboxes -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+            <CheckBox
+                    android:id="@+id/privacyPolicyCheckbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I agree to the Privacy Policy"
+                    android:textSize="14sp" />
+
+            <TextView
+                    android:id="@+id/privacyPolicyLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Privacy Policy"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp"
+                    android:paddingStart="40dp"
+                    android:paddingBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            <CheckBox
+                    android:id="@+id/termsConditionsCheckbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I agree to the Terms and Conditions"
+                    android:textSize="14sp" />
+
+            <TextView
+                    android:id="@+id/termsConditionsLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Terms and Conditions"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp"
+                    android:paddingStart="40dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+        </LinearLayout>
+
         <Button
                 android:id="@+id/signUpButton"
                 android:layout_width="match_parent"
@@ -67,7 +113,8 @@
                 android:text="Create account"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"
+                android:enabled="false" />
 
         <ProgressBar
                 android:id="@+id/signUpLoading"
