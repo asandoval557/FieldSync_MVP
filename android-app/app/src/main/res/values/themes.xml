@@ -3,7 +3,7 @@
     <style name="Theme.FieldSync.AppCompat" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorAccent">@color/teal_200</item>
+        <item name="colorAccent">@color/fs_text_primary</item>
 
         <!-- New items for general look -->
         <item name="android:textColorPrimary">@color/fs_text_primary</item>

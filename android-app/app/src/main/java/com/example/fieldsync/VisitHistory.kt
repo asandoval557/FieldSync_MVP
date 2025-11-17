@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,12 +42,18 @@ class VisitHistory : Fragment() {  // ← we inflate with binding (no layout in 
     ): View {
         _binding = FragmentVisitHistoryBinding.inflate(inflater, container, false)
 
-        // UI wiring
-        binding.visitHistoryBackBtn.setOnClickListener { parentFragmentManager.popBackStack() }
 
         // RecyclerView once
         binding.viewHistoryRecycleView.layoutManager = LinearLayoutManager(requireContext())
         binding.viewHistoryRecycleView.setHasFixedSize(true)
+
+        binding.visitHistoryToolbar.apply {
+            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+
+            }
+        }
 
         loadVisitHistory()
         return binding.root

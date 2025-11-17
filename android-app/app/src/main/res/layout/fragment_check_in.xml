@@ -6,13 +6,14 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/fs_border"
         tools:context=".CheckIn">
 
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/check_in_toolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/purple_700"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -22,10 +23,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check-In/Out"
-                android:textColor="@color/teal_200"
+                android:textColor="@color/fs_surface"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_gravity="center" />
+                android:layout_gravity="center" tools:layout_editor_absoluteY="14dp"
+                tools:layout_editor_absoluteX="164dp"/>
     </androidx.appcompat.widget.Toolbar>
 
 
@@ -57,7 +59,7 @@
                 app:layout_constraintStart_toStartOf="@+id/checkInStoreLabel"
                 app:layout_constraintTop_toBottomOf="@+id/checkInStoreLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" android:textColor="@color/fs_text_primary"/>
         <!-- Status -->
         <TextView
                 android:id="@+id/checkInStatusTv"
@@ -88,7 +90,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/checkInStartLabel"
                 app:layout_constraintStart_toEndOf="@+id/checkInStartLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="12dp"/>
+                android:layout_marginStart="12dp" android:textColor="@color/fs_text_primary"/>
 
         <!-- Check-out time -->
         <TextView
@@ -108,7 +110,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/checkInEndLabel"
                 app:layout_constraintStart_toEndOf="@+id/checkInEndLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="12dp"/>
+                android:layout_marginStart="12dp" android:textColor="@color/fs_text_primary"/>
 
         <!-- Duration -->
 
@@ -119,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:text="Visit Duration: —"
                 android:padding="12dp"
-                android:background="#EEEEEE"
+                android:background="@color/fs_border"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkInEndLabel"
@@ -146,10 +148,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/checkInLatTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
         <Button
                 android:id="@+id/checkInCheckInBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="166dp"
+                android:layout_height="45dp"
                 android:minHeight="48dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
@@ -158,22 +161,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/checkInCheckOutBtn"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"/>
-
+                android:layout_marginEnd="8dp" android:layout_marginStart="20dp"
+                android:background="@color/purple_500"
+                style="@android:style/Widget.Material.Button.Toggle"/>
         <Button
                 android:id="@+id/checkInCheckOutBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="166dp"
+                android:layout_height="45dp"
                 android:minHeight="48dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:text="Check Out"
                 android:enabled="false"
+                android:background="@color/purple_500"
                 app:layout_constraintTop_toBottomOf="@+id/checkInLonTv"
                 app:layout_constraintStart_toEndOf="@+id/checkInCheckInBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="8dp" android:layout_marginEnd="20dp"
+                style="@android:style/Widget.Material.Button.Toggle"/>
 
         <!-- Sales card -->
         <LinearLayout

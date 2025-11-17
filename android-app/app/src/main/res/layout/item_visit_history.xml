@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="Dec 25, 2024 at 2:30 PM"
             android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/fs_text_primary"
             android:layout_marginBottom="2dp" />
 
     <TextView
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:text="2h 15m"
             android:textSize="14sp"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@color/fs_text_primary" />
 
     <View
             android:layout_width="match_parent"

@@ -79,8 +79,12 @@ class PhotoCapture : Fragment() {
             ensureCameraPermissionThenLaunch()
         }
 
-        binding.photoCaptureBackBtn.setOnClickListener {
-            parentFragmentManager.popBackStack()
+        binding.photoCaptureToolbar.apply {
+            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+
+            }
         }
 
         return binding.root

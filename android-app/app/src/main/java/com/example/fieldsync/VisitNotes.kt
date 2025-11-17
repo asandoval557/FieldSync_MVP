@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -322,7 +323,7 @@ class VisitNotes : Fragment() {
             setPadding(24, 24, 24, 24)
         }
 
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setCustomTitle(titleView)
             .setView(input)
             .setPositiveButton("Add") { _, _ ->
@@ -335,6 +336,8 @@ class VisitNotes : Fragment() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#E0E0E0")))
     }
 
     private fun showEditNoteDialog(note: Note) {
@@ -346,7 +349,7 @@ class VisitNotes : Fragment() {
             setPadding(24, 24, 24, 24)
         }
 
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Edit Note")
             .setView(input)
             .setPositiveButton("Save") { _, _ ->
@@ -357,6 +360,7 @@ class VisitNotes : Fragment() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#E0E0E0")))
     }
 
     private fun toggleSelection(note: Note) {

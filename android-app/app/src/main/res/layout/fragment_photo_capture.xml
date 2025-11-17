@@ -8,9 +8,30 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
+            android:background="@color/fs_border"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/photo_capture_toolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/purple_700"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                    android:id="@+id/check_in_toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Photo Capture"
+                    android:textColor="@color/fs_surface"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center" tools:layout_editor_absoluteY="14dp"
+                    tools:layout_editor_absoluteX="164dp"/>
+        </androidx.appcompat.widget.Toolbar>
 
         <TextView
                 android:id="@+id/photoStatusTv"
@@ -19,21 +40,23 @@
                 android:text="No photo captured yet"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="64dp"
+                app:layout_constraintHorizontal_bias="0.0"/>
         <ImageView
                 android:id="@+id/photoPreviewIv"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="407dp"
+                android:layout_height="813dp"
                 android:contentDescription="Photo Preview"
                 android:scaleType="centerCrop"
                 android:background="#EEEEEE"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintTop_toBottomOf="@id/photoStatusTv"
                 app:layout_constraintBottom_toTopOf="@+id/photo_capture_openCameraBtn"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintVertical_bias="0.111" android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
 
         <Button
                 android:id="@+id/photo_capture_openCameraBtn"
@@ -44,10 +67,11 @@
                 android:paddingBottom="12dp"
                 android:text="Capture Photo"
                 android:layout_marginEnd="8dp"
+                style="@android:style/Widget.Material.Button.Toggle"
+                android:background="@color/purple_500"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/photoSaveBtn" />
-
+                app:layout_constraintEnd_toStartOf="@+id/photoSaveBtn" android:layout_marginBottom="16dp"/>
         <Button
                 android:id="@+id/photoSaveBtn"
                 android:layout_width="0dp"
@@ -58,19 +82,11 @@
                 android:text="Save"
                 android:enabled="false"
                 android:layout_marginStart="8dp"
+                style="@android:style/Widget.Material.Button.Toggle"
+                android:background="@color/purple_500"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/photo_capture_openCameraBtn"
-                app:layout_constraintEnd_toEndOf="parent" />
-        <ImageButton
-                android:id="@+id/photo_capture_backBtn"
-                android:layout_width="56dp"
-                android:layout_height="49dp"
-                android:src="@drawable/ic_arrow_back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
-                app:layout_constraintHorizontal_bias="0.014"/>
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
