@@ -231,6 +231,7 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
     private fun fetchStores() {
         Firebase.firestore.collection(COLLECTION)
+            .orderBy(FIELD_STORE_ID, Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { snap ->
                 val items = snap.documents.mapNotNull { doc ->
