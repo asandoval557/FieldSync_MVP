@@ -19,48 +19,18 @@ class MainMenu : Fragment(R.layout.fragment_main_menu) {
     private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainMenuBinding.bind(view)
 
+        // Apply system bar insets to root
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Set temporary placeholder right away
-        binding.mainMenuHelloTxt.text = "Hello, loading..."
-
+        // SharedPreferences still used for clearing username on logout
         val prefs = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
-        val cachedName = prefs.getString("username", null)
-        val currentUser = auth.currentUser
-
-        //  If we have a cached username, show it right away
-        if (!cachedName.isNullOrBlank()) {
-            binding.mainMenuHelloTxt.text = "Hello, $cachedName"
-        }
-        // If not cached, but user is logged in, fetch from Firestore
-        else if (currentUser != null) {
-            val userId = currentUser.uid
-            db.collection("users").document(userId)
-                .get()
-                .addOnSuccessListener { document ->
-                    val name = document.getString("username")
-                    if (!name.isNullOrBlank()) {
-                        binding.mainMenuHelloTxt.text = "Hello, $name"
-                        prefs.edit().putString("username", name).apply()
-                    } else {
-                        binding.mainMenuHelloTxt.text = "Hello, User"
-                    }
-                }
-                .addOnFailureListener { e ->
-                    binding.mainMenuHelloTxt.text = "Hello, User"
-                    Toast.makeText(requireContext(), "Error loading username: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
-        //No user logged in
-        else {
-            binding.mainMenuHelloTxt.text = "Hello, Guest"
-        }
 
         // --- Buttons ---
         binding.mainMenuCheckInBtn.setOnClickListener {
@@ -91,11 +61,11 @@ class MainMenu : Fragment(R.layout.fragment_main_menu) {
             (activity as? MainActivity)?.SetActiveFragment(PhotoCapture())
         }
 
-        binding.mainMenuLogoutBtn.setOnClickListener {
+        /*binding.mainMenuLogoutBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            prefs.edit().clear().apply() // clear cached username
+            prefs.edit().clear().apply() // clear cached username (and other user prefs)
             Toast.makeText(requireContext(), "Logged out successfully", Toast.LENGTH_SHORT).show()
             (activity as? MainActivity)?.SetActiveFragment(LoginFragment())
-        }
+        }*/
     }
 }

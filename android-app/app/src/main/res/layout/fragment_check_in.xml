@@ -6,7 +6,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/fs_border"
+        android:background="@color/fs_background"
         tools:context=".CheckIn">
 
     <androidx.appcompat.widget.Toolbar
@@ -26,10 +26,8 @@
                 android:textColor="@color/fs_surface"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_gravity="center" tools:layout_editor_absoluteY="14dp"
-                tools:layout_editor_absoluteX="164dp"/>
+                android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -37,29 +35,41 @@
             app:layout_constraintTop_toBottomOf="@id/check_in_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:padding="16dp">
 
         <TextView
                 android:id="@+id/checkInStoreLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Store Location"
+                android:text="Select Store"
                 android:textSize="18sp"
+                android:textColor="@color/fs_surface"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        <EditText
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- AutoCompleteTextView for dropdown + manual entry -->
+        <AutoCompleteTextView
                 android:id="@+id/checkInStoreEt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:hint="Enter store name or ID"
-                android:inputType="textCapWords"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:hint="Type Store ID or select from list"
+                android:inputType="text"
+                android:completionThreshold="1"
+                android:dropDownHeight="200dp"
+                android:background="@android:drawable/edit_text"
                 app:layout_constraintStart_toStartOf="@+id/checkInStoreLabel"
                 app:layout_constraintTop_toBottomOf="@+id/checkInStoreLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp" android:textColor="@color/fs_text_primary"/>
+                android:layout_marginTop="8dp"
+                android:textColor="@color/fs_text_primary" />
+
         <!-- Status -->
         <TextView
                 android:id="@+id/checkInStatusTv"
@@ -67,10 +77,11 @@
                 android:layout_height="wrap_content"
                 android:text="Status: Not Checked In"
                 android:textStyle="bold"
+                android:textColor="@color/fs_surface"
                 android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkInStoreEt"
                 app:layout_constraintStart_toStartOf="@+id/checkInStoreEt"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="2dp"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Check-in time -->
         <TextView
@@ -78,19 +89,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check-in Time"
+                android:textColor="@color/fs_surface"
                 android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkInStatusTv"
-                app:layout_constraintStart_toStartOf="@+id/checkInStatusTv" android:layout_marginStart="2dp"/>
+                app:layout_constraintStart_toStartOf="@+id/checkInStatusTv" />
 
         <TextView
                 android:id="@+id/checkInStartTv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Start: —"
+                android:textColor="@color/fs_surface"
                 app:layout_constraintBaseline_toBaselineOf="@+id/checkInStartLabel"
                 app:layout_constraintStart_toEndOf="@+id/checkInStartLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="12dp" android:textColor="@color/fs_text_primary"/>
+                android:layout_marginStart="12dp" />
 
         <!-- Check-out time -->
         <TextView
@@ -98,23 +111,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check-out Time"
+                android:textColor="@color/fs_surface"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkInStartLabel"
-                app:layout_constraintStart_toStartOf="@+id/checkInStartLabel"/>
+                app:layout_constraintStart_toStartOf="@+id/checkInStartLabel" />
 
         <TextView
                 android:id="@+id/checkInEndTv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="End: —"
+                android:textColor="@color/fs_surface"
                 app:layout_constraintBaseline_toBaselineOf="@+id/checkInEndLabel"
                 app:layout_constraintStart_toEndOf="@+id/checkInEndLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="12dp" android:textColor="@color/fs_text_primary"/>
+                android:layout_marginStart="12dp" />
 
         <!-- Duration -->
-
-        <!-- GPS Coordinates display -->
         <TextView
                 android:id="@+id/checkInDurationTv"
                 android:layout_width="0dp"
@@ -123,63 +136,69 @@
                 android:padding="12dp"
                 android:background="@color/fs_border"
                 android:textStyle="bold"
+                android:textColor="@color/fs_surface"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkInEndLabel"
                 app:layout_constraintStart_toStartOf="@+id/checkInEndLabel"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- GPS Coordinates display -->
         <TextView
                 android:id="@+id/checkInLatTv"
-                android:layout_width="387dp"
-                android:layout_height="18dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="Latitude: —"
                 android:layout_marginTop="16dp"
                 android:textStyle="bold"
+                android:textColor="@color/fs_surface"
                 app:layout_constraintTop_toBottomOf="@+id/checkInDurationTv"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.481"/>
+                app:layout_constraintEnd_toEndOf="parent" />
+
         <TextView
                 android:id="@+id/checkInLonTv"
-                android:layout_width="389dp"
-                android:layout_height="18dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="Longitude: —"
                 android:textStyle="bold"
+                android:textColor="@color/fs_surface"
+                android:layout_marginTop="4dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkInLatTv"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
                 android:id="@+id/checkInCheckInBtn"
-                android:layout_width="166dp"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:minHeight="48dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:text="Check In"
+                android:textColor="@color/fs_surface"
+                android:background="@color/purple_500"
                 app:layout_constraintTop_toBottomOf="@+id/checkInLonTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/checkInCheckOutBtn"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp" android:layout_marginStart="20dp"
-                android:background="@color/purple_500"
-                style="@android:style/Widget.Material.Button.Toggle"/>
+                android:layout_marginEnd="8dp" />
+
         <Button
                 android:id="@+id/checkInCheckOutBtn"
-                android:layout_width="166dp"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:minHeight="48dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:text="Check Out"
+                android:textColor="@color/fs_surface"
                 android:enabled="false"
                 android:background="@color/purple_500"
                 app:layout_constraintTop_toBottomOf="@+id/checkInLonTv"
                 app:layout_constraintStart_toEndOf="@+id/checkInCheckInBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="8dp" android:layout_marginEnd="20dp"
-                style="@android:style/Widget.Material.Button.Toggle"/>
+                android:layout_marginStart="8dp" />
 
         <!-- Sales card -->
         <LinearLayout
@@ -189,7 +208,7 @@
                 android:layout_marginTop="24dp"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:background="#FFFFFF"
+                android:background="@color/fs_surface"
                 android:elevation="4dp"
                 app:layout_constraintTop_toBottomOf="@id/checkInCheckOutBtn"
                 app:layout_constraintStart_toStartOf="parent"
@@ -201,20 +220,17 @@
                     android:layout_height="wrap_content"
                     android:text="Sales (last 30 days)"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="@color/fs_text_primary" />
 
             <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/salesChart"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginTop="12dp"
-                    tools:ignore="MissingClass"/>
+                    tools:ignore="MissingClass" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 

@@ -6,13 +6,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -36,11 +37,11 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
-// Step 2: ViewModel + model from Step 1
+// ViewModel + model
 import com.example.fieldsync.salesmock.CheckInSalesViewModel
 import com.example.fieldsync.salesmock.SalesPoint
 
-class CheckIn : Fragment() { // ← inflate with binding (no layout in constructor)
+class CheckIn : Fragment() {
 
     private var _binding: FragmentCheckInBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +50,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
 
     // Firebase constants
     private companion object {
+        const val TAG = "CheckIn"
         const val COLLECTION = "Visit_Check_In_Out"
         const val STORE_COLLECTION = "Store_Management"
         const val FIELD_STORE_ID = "StoreID"
@@ -58,14 +60,14 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         const val FIELD_VISIT_DURATION = "VisitDuration"
         const val FIELD_VISIT_ID = "VisitID"
         const val FIELD_STATUS = "Status"
-        const val FIELD_LATITUDE = "Latitude"      // NEW: save latitude
-        const val FIELD_LONGITUDE = "Longitude"    // NEW: save longitude
+        const val FIELD_LATITUDE = "Latitude"
+        const val FIELD_LONGITUDE = "Longitude"
 
         // store management fields
         const val STORE_FIELD_STORE_ID = "StoreID"
         const val STORE_FIELD_STORE_NAME = "Store Name"
 
-        private const val LOCATION_PERMISSION_REQUEST = 1001 // NEW: request code for permission
+        private const val LOCATION_PERMISSION_REQUEST = 1001
     }
 
     private val prefs by lazy {
@@ -77,8 +79,19 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
     private var selectedStoreId: Long? = null
     private var selectedStoreName: String? = ""
 
+    // Store list for dropdown
+    private val storeList = mutableListOf<StoreItem>()
+    private var storeAdapter: ArrayAdapter<String>? = null
+
     // Fused location provider for GPS
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    data class StoreItem(
+        val storeId: Long,
+        val storeName: String
+    ) {
+        override fun toString(): String = "$storeName (ID: $storeId)"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,7 +102,6 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
 
         // Initialize location services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
 
         // Initialize coordinate labels
         setCoordLabels(null, null)
@@ -102,15 +114,26 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
 
         restoreState()
         checkForActiveVisit()
+        loadStoresFromFirebase()
+
+        // Setup AutoCompleteTextView item click listener
+        binding.checkInStoreEt.setOnItemClickListener { parent, _, position, _ ->
+            val selectedText = parent.getItemAtPosition(position).toString()
+            // Extract store ID from the selected text
+            val storeItem = storeList.find { it.toString() == selectedText }
+            storeItem?.let {
+                selectedStoreId = it.storeId
+                selectedStoreName = it.storeName
+                Log.d(TAG, "Selected store: ${it.storeName} (ID: ${it.storeId})")
+            }
+        }
 
         binding.checkInToolbar.apply {
             navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
-
             }
         }
-
 
         // Buttons
         binding.checkInCheckInBtn.setOnClickListener { performCheckIn() }
@@ -138,8 +161,56 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         return binding.root
     }
 
-    // Sales chart helpers
+    private fun loadStoresFromFirebase() {
+        Log.d(TAG, "Loading stores from Firebase...")
 
+        Firebase.firestore.collection(STORE_COLLECTION)
+            .get()
+            .addOnSuccessListener { documents ->
+                storeList.clear()
+
+                for (document in documents) {
+                    try {
+                        val storeId = document.getLong(STORE_FIELD_STORE_ID)
+                        val storeName = document.getString(STORE_FIELD_STORE_NAME)
+
+                        if (storeId != null && !storeName.isNullOrEmpty()) {
+                            storeList.add(StoreItem(storeId, storeName))
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error parsing store document", e)
+                    }
+                }
+
+                // Sort by store name
+                storeList.sortBy { it.storeName }
+
+                // Create adapter with formatted strings
+                val displayList = storeList.map { it.toString() }
+                storeAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    displayList
+                )
+                binding.checkInStoreEt.setAdapter(storeAdapter)
+
+                Log.d(TAG, "Loaded ${storeList.size} stores")
+
+                // If we have a pre-selected store, show it
+                selectedStoreId?.let { storeId ->
+                    val storeItem = storeList.find { it.storeId == storeId }
+                    storeItem?.let {
+                        binding.checkInStoreEt.setText(it.toString(), false)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error loading stores", e)
+                Toast.makeText(requireContext(), "Failed to load stores: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // Sales chart helpers
     private fun setupSalesChart(chart: LineChart) {
         chart.description.isEnabled = false
         chart.legend.isEnabled = false
@@ -178,8 +249,11 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         currentVisitDocumentId = prefs.getString("current_visit_doc_id", null)
         currentVisitId = prefs.getLong("current_visit_id", -1L).takeIf { it != -1L }
 
-        selectedStoreId?.let {
-            binding.checkInStoreEt.setText(it.toString())
+        // Pre-fill store if we have it
+        selectedStoreId?.let { storeId ->
+            selectedStoreName?.let { storeName ->
+                binding.checkInStoreEt.setText("$storeName (ID: $storeId)", false)
+            }
         }
     }
 
@@ -197,7 +271,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                             val storeId = document.getLong(FIELD_STORE_ID) ?: 0L
                             val visitId = document.getLong(FIELD_VISIT_ID) ?: 0L
 
-                            binding.checkInStoreEt.setText(storeId.toString())
+                            binding.checkInStoreEt.setText("$storeName (ID: $storeId)", false)
                             updateUi(
                                 checkedIn = true,
                                 store = "$storeName (ID: $storeId)",
@@ -205,6 +279,8 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                                 end = 0L
                             )
                             currentVisitId = visitId
+                            selectedStoreId = storeId
+                            selectedStoreName = storeName
 
                             // refresh chart once we confirm store context
                             salesVm.loadForStore(storeId)
@@ -242,7 +318,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     callback(location.latitude, location.longitude)
-                    setCoordLabels(location.latitude, location.longitude) // update UI labels
+                    setCoordLabels(location.latitude, location.longitude)
                 } else {
                     Toast.makeText(context, "Unable to retrieve location.", Toast.LENGTH_SHORT).show()
                     callback(null, null)
@@ -257,13 +333,24 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
     private fun performCheckIn() {
         val storeIdText = binding.checkInStoreEt.text?.toString()?.trim().orEmpty()
         if (storeIdText.isEmpty()) {
-            Toast.makeText(requireContext(), "Enter a store ID first.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please select or enter a store.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val storeId = storeIdText.toLongOrNull()
+        // Try to extract store ID from selected text or parse as number
+        var storeId: Long? = null
+
+        // Check if it's from dropdown selection (format: "Store Name (ID: 123)")
+        if (storeIdText.contains("(ID:") && storeIdText.contains(")")) {
+            val idPart = storeIdText.substringAfter("(ID:").substringBefore(")").trim()
+            storeId = idPart.toLongOrNull()
+        } else {
+            // Try to parse as direct number input
+            storeId = storeIdText.toLongOrNull()
+        }
+
         if (storeId == null) {
-            Toast.makeText(requireContext(), "Please enter a valid store ID.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Invalid store ID format.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -292,8 +379,8 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                         FIELD_VISIT_DURATION to null,
                         FIELD_VISIT_ID to visitId,
                         FIELD_STATUS to "checked_in",
-                        FIELD_LATITUDE to lat,     // NEW
-                        FIELD_LONGITUDE to lon     // NEW
+                        FIELD_LATITUDE to lat,
+                        FIELD_LONGITUDE to lon
                     )
 
                     Firebase.firestore.collection(COLLECTION)
@@ -301,6 +388,8 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                         .addOnSuccessListener { documentReference ->
                             currentVisitDocumentId = documentReference.id
                             currentVisitId = visitId
+                            selectedStoreId = storeId
+                            selectedStoreName = storeName
 
                             prefs.edit()
                                 .putString("current_visit_doc_id", currentVisitDocumentId)
@@ -309,10 +398,10 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                                 .putString("current_store_name", storeName)
                                 .apply()
 
-                            Toast.makeText(requireContext(), "Checked in successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Checked in to $storeName", Toast.LENGTH_SHORT).show()
                             updateUi(
                                 checkedIn = true,
-                                store = storeName,
+                                store = "$storeName (ID: $storeId)",
                                 start = checkInTime.toDate().time,
                                 end = 0L
                             )
@@ -366,7 +455,7 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
                                 .document(docId)
                                 .update(updates)
                                 .addOnSuccessListener {
-                                    Toast.makeText(requireContext(), "Checked out successfully", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Checked out from $storeName", Toast.LENGTH_SHORT).show()
                                     updateUi(
                                         checkedIn = false,
                                         store = "$storeName (ID: $storeId)",
@@ -390,12 +479,17 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
     private fun clearLocalVisitState() {
         currentVisitDocumentId = null
         currentVisitId = null
+        selectedStoreId = null
+        selectedStoreName = null
         prefs.edit().clear().apply()
     }
 
     private fun updateUi(checkedIn: Boolean, store: String, start: Long, end: Long) = binding.apply {
         checkInCheckInBtn.isEnabled = !checkedIn
         checkInCheckOutBtn.isEnabled = checkedIn
+
+        // Disable store selection when checked in
+        checkInStoreEt.isEnabled = !checkedIn
 
         checkInStatusTv.text =
             if (checkedIn) "Status: Checked In @ ${store.ifBlank { "—" }}"
@@ -435,5 +529,3 @@ class CheckIn : Fragment() { // ← inflate with binding (no layout in construct
         _binding = null
     }
 }
-
-
