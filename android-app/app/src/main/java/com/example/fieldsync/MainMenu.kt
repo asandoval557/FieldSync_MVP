@@ -61,11 +61,11 @@ class MainMenu : Fragment(R.layout.fragment_main_menu) {
             (activity as? MainActivity)?.SetActiveFragment(PhotoCapture())
         }
 
-        /*binding.mainMenuLogoutBtn.setOnClickListener {
+        binding.mainMenuLogoutBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             prefs.edit().clear().apply() // clear cached username (and other user prefs)
             Toast.makeText(requireContext(), "Logged out successfully", Toast.LENGTH_SHORT).show()
             (activity as? MainActivity)?.SetActiveFragment(LoginFragment())
-        }*/
+        }
     }
 }

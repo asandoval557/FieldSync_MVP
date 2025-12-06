@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Create your account"
-                android:textColor="@android:color/black"
+                android:textColor="@color/fs_text_primary"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:paddingBottom="16dp" />
@@ -29,42 +29,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Username"
-                android:textColor="@color/fs_text_primary"
+                android:background="@drawable/fs_edittext_bg"
+                android:textColor="@color/fs_text_secondary"
+                android:textColorHint="@color/fs_text_secondary"
                 android:inputType="textPersonName"
-                android:autofillHints="name"
                 android:imeOptions="actionNext"
-                android:paddingBottom="12dp" />
-
+                android:padding="12dp" />
 
         <EditText
                 android:id="@+id/signUpEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:textColor="@color/fs_text_primary"
+                android:background="@drawable/fs_edittext_bg"
+                android:textColor="@color/fs_text_secondary"
+                android:textColorHint="@color/fs_text_secondary"
                 android:inputType="textEmailAddress"
-                android:autofillHints="emailAddress"
-                android:imeOptions="actionNext" />
+                android:imeOptions="actionNext"
+                android:padding="12dp" />
 
         <EditText
                 android:id="@+id/signUpPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password (min 6 chars)"
-                android:textColor="@color/fs_text_primary"
+                android:background="@drawable/fs_edittext_bg"
+                android:textColor="@color/fs_text_secondary"
+                android:textColorHint="@color/fs_text_secondary"
                 android:inputType="textPassword"
                 android:imeOptions="actionNext"
-                android:paddingTop="12dp" />
+                android:padding="12dp" />
 
         <EditText
                 android:id="@+id/signUpConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Confirm password"
-                android:textColor="@color/fs_text_primary"
+                android:background="@drawable/fs_edittext_bg"
+                android:textColor="@color/fs_text_secondary"
+                android:textColorHint="@color/fs_text_secondary"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
-                android:paddingTop="12dp" />
+                android:padding="12dp" />
+
 
         <!-- Privacy Policy and Terms Checkboxes -->
         <LinearLayout
@@ -78,37 +85,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="I agree to the Privacy Policy"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/fs_text_primary" />
 
             <TextView
                     android:id="@+id/privacyPolicyLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View Privacy Policy"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/teal_200"
                     android:textSize="12sp"
                     android:paddingStart="40dp"
-                    android:paddingBottom="8dp"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:paddingBottom="8dp" />
 
             <CheckBox
                     android:id="@+id/termsConditionsCheckbox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="I agree to the Terms and Conditions"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/fs_text_primary" />
 
             <TextView
                     android:id="@+id/termsConditionsLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View Terms and Conditions"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/teal_200"
                     android:textSize="12sp"
-                    android:paddingStart="40dp"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:paddingStart="40dp" />
 
         </LinearLayout>
 
@@ -137,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Already have an account? Log in"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="@color/teal_200"
                 android:paddingTop="24dp" />
     </LinearLayout>
 </ScrollView>
