@@ -6,12 +6,28 @@
               android:padding="16dp"
               android:background="?attr/selectableItemBackground"
               android:layout_marginBottom="8dp">
+
     <TextView
-            android:text="TextView"
+            android:id="@+id/visitNotes_noteDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/visitNotes_noteDate" android:textSize="16sp"/>
+            android:layout_height="wrap_content"
+            android:text="Dec 6, 2025 at 8:23 AM"
+            android:textSize="14sp"
+            android:textColor="@color/fs_surface" />
+
     <TextView
-            android:text="TextView"
+            android:id="@+id/visitNotes_noteBody"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/visitNotes_noteBody"/>
+            android:layout_height="wrap_content"
+            android:text="13 min"
+            android:textColor="@color/fs_surface" />
+
+    <!-- Divider bar to visually separate entries -->
+    <View
+            android:id="@+id/visitNotes_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/fs_surface_alt" />
+    <!-- or use a softer line: #33FFFFFF for semi-transparent white -->
 </LinearLayout>

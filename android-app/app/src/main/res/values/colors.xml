@@ -11,7 +11,7 @@
     <color name="fs_border">#071C42</color>
     <color name="fs_background">#071C42</color>
 
-    <color name="fs_text_primary">#101908</color>
+    <color name="fs_text_primary">#FFFFFF</color>
     <color name="fs_text_secondary">#99071C42</color> <!-- Navy with some transparency -->
 
     <color name="fs_success">#20C997</color>

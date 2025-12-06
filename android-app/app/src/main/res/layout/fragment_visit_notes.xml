@@ -18,17 +18,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:menu="@menu/visit_notes_menu">
 
+        <ImageButton
+                android:id="@+id/visitnotesBackBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/fs_surface"
+                android:layout_gravity="start|center_vertical" />
+
+
         <TextView
                 android:id="@+id/visit_notes_toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Visit Notes"
-                android:textColor="@color/fs_border"
+                android:textColor="@color/fs_surface"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
-
 
 
 

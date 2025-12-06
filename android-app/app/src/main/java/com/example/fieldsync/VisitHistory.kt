@@ -47,12 +47,8 @@ class VisitHistory : Fragment() {  // ← we inflate with binding (no layout in 
         binding.viewHistoryRecycleView.layoutManager = LinearLayoutManager(requireContext())
         binding.viewHistoryRecycleView.setHasFixedSize(true)
 
-        binding.visitHistoryToolbar.apply {
-            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
-            setNavigationOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-
-            }
+        binding.visithistoryBackBtn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         loadVisitHistory()

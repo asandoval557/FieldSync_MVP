@@ -14,7 +14,7 @@
             android:text="Store Name"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="@color/fs_text_primary"
             android:layout_marginBottom="4dp" />
 
     <TextView

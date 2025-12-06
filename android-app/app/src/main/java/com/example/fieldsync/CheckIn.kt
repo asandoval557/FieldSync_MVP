@@ -128,11 +128,8 @@ class CheckIn : Fragment() {
             }
         }
 
-        binding.checkInToolbar.apply {
-            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
-            setNavigationOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
+        binding.checkInBackBtn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         // Buttons
@@ -187,11 +184,12 @@ class CheckIn : Fragment() {
 
                 // Create adapter with formatted strings
                 val displayList = storeList.map { it.toString() }
-                storeAdapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    displayList
-                )
+                    storeAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.fragment_dropdown_item,   //Custom layout for dropdown
+                        R.id.dropdownText,
+                        displayList
+                    )
                 binding.checkInStoreEt.setAdapter(storeAdapter)
 
                 Log.d(TAG, "Loaded ${storeList.size} stores")

@@ -21,6 +21,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
+            <ImageButton
+                    android:id="@+id/visithistoryBackBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Back"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/fs_surface"
+                    android:layout_gravity="start|center_vertical" />
+
             <TextView
                     android:id="@+id/check_in_toolbar_title"
                     android:layout_width="wrap_content"
@@ -37,23 +47,27 @@
                 android:id="@+id/visit_history_errorTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:text="Failed to retrieve past visits"
+                android:textColor="@color/fs_surface"
                 android:visibility="invisible"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/visit_history_toolbar"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/visit_history_locationTxt"
-                android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/visit_history_toolbar"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="263dp"
-                app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.15"/>
+                app:layout_constraintBottom_toTopOf="@+id/visit_history_locationTxt" />
         <TextView
                 android:id="@+id/visit_history_locationTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Store Location"
+                android:textColor="@color/fs_surface"
+                android:textColorHint="@color/fs_text_secondary"
                 android:layout_margin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="60dp" app:layout_constraintTop_toBottomOf="@+id/visit_history_toolbar"/>
+                android:layout_marginTop="60dp"
+                app:layout_constraintTop_toBottomOf="@+id/visit_history_toolbar"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/viewHistoryRecycleView"
                 android:layout_width="411dp"

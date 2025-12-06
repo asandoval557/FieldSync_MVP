@@ -110,12 +110,8 @@ class VisitNotes : Fragment() {
 
 
         // Back Button
-        binding.visitNotesToolbar.apply {
-            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
-            setNavigationContentDescription("Back")
-            setNavigationOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
+        binding.visitnotesBackBtn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
 
@@ -308,12 +304,14 @@ class VisitNotes : Fragment() {
 
     private fun showAddNoteDialog() {
 
-        // Used to match edit text padding
         val titleView = TextView(requireContext()).apply {
             text = "New Note"
             setPadding(24, 24, 24, 0)
             textSize = 20f
             setTypeface(null, Typeface.BOLD)
+
+            // Text color for title
+            setTextColor(ContextCompat.getColor(context, R.color.fs_text_secondary))
         }
 
         val input = EditText(requireContext()).apply {
@@ -321,47 +319,89 @@ class VisitNotes : Fragment() {
             minLines = 1
             gravity = Gravity.BOTTOM
             setPadding(24, 24, 24, 24)
+
+            // FieldSync text colors
+            setTextColor(ContextCompat.getColor(context, R.color.fs_text_secondary))
+            setHintTextColor(ContextCompat.getColor(context, R.color.fs_text_secondary))
+
+            // Prevent ugly blue underline
+            backgroundTintList = ContextCompat.getColorStateList(context, R.color.fs_surface)
         }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setCustomTitle(titleView)
             .setView(input)
-            .setPositiveButton("Add") { _, _ ->
-                val noteText = input.text.toString().trim()
-                if (noteText.isNotEmpty()) {
-                    addNote(noteText)
-                } else {
-                    Toast.makeText(requireContext(), "Note cannot be empty", Toast.LENGTH_SHORT).show()
-                }
-            }
+            .setPositiveButton("Add", null)
             .setNegativeButton("Cancel", null)
             .show()
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#E0E0E0")))
+        dialog.window?.setBackgroundDrawable(
+            ColorDrawable(ContextCompat.getColor(requireContext(), R.color.fs_surface_alt))
+        )
+
+        // Buttons → fs_text_secondary
+        val btnColor = ContextCompat.getColor(requireContext(), R.color.fs_text_secondary)
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(btnColor)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(btnColor)
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
+            val noteText = input.text.toString().trim()
+            if (noteText.isNotEmpty()) {
+                addNote(noteText)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(requireContext(), "Note cannot be empty", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
+
     private fun showEditNoteDialog(note: Note) {
+
         val input = EditText(requireContext()).apply {
             setText(note.body)
             hint = "Enter note"
             minLines = 1
             gravity = Gravity.BOTTOM
             setPadding(24, 24, 24, 24)
+
+            // FieldSync text colors
+            setTextColor(ContextCompat.getColor(context, R.color.fs_text_secondary))
+            setHintTextColor(ContextCompat.getColor(context, R.color.fs_text_secondary))
+
+            // Prevent blue underline
+            backgroundTintList = ContextCompat.getColorStateList(context, R.color.fs_surface)
         }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Edit Note")
             .setView(input)
-            .setPositiveButton("Save") { _, _ ->
-                val updatedText = input.text.toString().trim()
-                if (updatedText.isNotEmpty()) {
-                    editNote(note.id, updatedText)
-                }
-            }
+            .setPositiveButton("Save", null)
             .setNegativeButton("Cancel", null)
             .show()
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#E0E0E0")))
+
+        // Dialog background
+        dialog.window?.setBackgroundDrawable(
+            ColorDrawable(ContextCompat.getColor(requireContext(), R.color.fs_surface_alt))
+        )
+
+        // Buttons → fs_text_secondary
+        val btnColor = ContextCompat.getColor(requireContext(), R.color.fs_text_secondary)
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(btnColor)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(btnColor)
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
+            val updated = input.text.toString().trim()
+            if (updated.isNotEmpty()) {
+                editNote(note.id, updated)
+                dialog.dismiss()
+            }
+        }
     }
+
+
 
     private fun toggleSelection(note: Note) {
         if (selectedNotes.contains(note)) {
