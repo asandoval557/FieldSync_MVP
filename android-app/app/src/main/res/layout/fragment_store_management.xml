@@ -10,46 +10,45 @@
     tools:context=".StoreManagement">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/store_management_toolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_700"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+            android:id="@+id/store_management_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/purple_700"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
-            android:id="@+id/storeManagementBackBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Back"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/fs_surface"
-            android:layout_gravity="start" />
+                android:id="@+id/storeManagementBackBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/fs_surface"
+                android:layout_gravity="start|center_vertical" />
 
         <TextView
-            android:id="@+id/store_management_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Store Management"
-            android:textColor="@color/fs_surface"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center" />
+                android:id="@+id/store_management_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Store Management"
+                android:textColor="@color/fs_surface"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center" />
 
-        <Button
-            android:id="@+id/storeManagementAddBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:text="Add Store"
-            android:textSize="14sp"
-            android:background="@color/purple_500"
-            style="@android:style/Widget.Material.Button.Toggle" />
-
+        <ImageButton
+                android:id="@+id/storeManagementAddBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_add"
+                android:contentDescription="Add Store"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp" />
     </androidx.appcompat.widget.Toolbar>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

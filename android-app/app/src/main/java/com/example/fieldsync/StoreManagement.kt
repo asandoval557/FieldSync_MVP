@@ -24,6 +24,12 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.app.AlertDialog
 import java.io.File
+import androidx.core.content.ContextCompat
+import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
+import android.graphics.Color
+
+
 
 class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
@@ -81,37 +87,72 @@ class StoreManagement : Fragment(R.layout.fragment_store_management)  {
 
 
     private fun showAddStoreDialog() {
-        val dialogView = LayoutInflater.from(requireContext())
+        val ctx = requireContext()
+
+        // Inflate layout
+        val dialogView = LayoutInflater.from(ctx)
             .inflate(R.layout.dialog_add_store, null)
 
         val storeNameInput = dialogView.findViewById<EditText>(R.id.dialog_store_name_input)
-        val addressInput = dialogView.findViewById<EditText>(R.id.dialog_address_input)
-        val cityInput = dialogView.findViewById<EditText>(R.id.dialog_city_input)
-        val stateInput = dialogView.findViewById<EditText>(R.id.dialog_state_input)
+        val addressInput   = dialogView.findViewById<EditText>(R.id.dialog_address_input)
+        val cityInput      = dialogView.findViewById<EditText>(R.id.dialog_city_input)
+        val stateInput     = dialogView.findViewById<EditText>(R.id.dialog_state_input)
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("Add New Store")
+        // FieldSync colors
+        val textSecondary = ContextCompat.getColor(ctx, R.color.fs_text_secondary)
+        val surfaceAlt    = ContextCompat.getColor(ctx, R.color.fs_surface_alt)
+
+        // Match Add Note: inputs use fs_text_secondary
+        listOf(storeNameInput, addressInput, cityInput, stateInput).forEach { input ->
+            input.setTextColor(textSecondary)
+            input.setHintTextColor(textSecondary)
+            input.backgroundTintList =
+                ContextCompat.getColorStateList(ctx, R.color.fs_surface) // underline like notes dialog
+        }
+
+        // Match Add Note: custom title using fs_text_secondary
+        val titleView = TextView(ctx).apply {
+            text = "Add New Store"   // can move to strings.xml later
+            setPadding(32, 32, 32, 8)
+            textSize = 20f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(textSecondary)
+        }
+
+        val dialog = AlertDialog.Builder(ctx)
+            .setCustomTitle(titleView)
             .setView(dialogView)
-            .setPositiveButton("Add") { _, _ ->
-                val storeName = storeNameInput.text.toString().trim()
-                val address = addressInput.text.toString().trim()
-                val city = cityInput.text.toString().trim()
-                val state = stateInput.text.toString().trim()
-
-                if (storeName.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty()) {
-                    Toast.makeText(
-                        requireContext(),
-                        "All fields are required",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setPositiveButton
-                }
-
-                generateNextStoreIdAndAdd(storeName, address, city, state)
-            }
+            .setPositiveButton("Add", null)
             .setNegativeButton("Cancel", null)
             .show()
+
+        // Match Add Note: light card-style background
+        dialog.window?.setBackgroundDrawable(ColorDrawable(surfaceAlt))
+
+        // Match Add Note: buttons also fs_text_secondary
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            ?.setTextColor(textSecondary)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            ?.setTextColor(textSecondary)
+
+        // Positive button handler with validation
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
+            val storeName = storeNameInput.text.toString().trim()
+            val address   = addressInput.text.toString().trim()
+            val city      = cityInput.text.toString().trim()
+            val state     = stateInput.text.toString().trim()
+
+            if (storeName.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty()) {
+                Toast.makeText(ctx, "All fields are required", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            generateNextStoreIdAndAdd(storeName, address, city, state)
+            dialog.dismiss()
+        }
     }
+
+
 
     private fun generateNextStoreIdAndAdd(
         storeName: String,
