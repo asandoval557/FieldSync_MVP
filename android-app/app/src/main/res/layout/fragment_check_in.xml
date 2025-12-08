@@ -186,7 +186,7 @@
                 android:paddingBottom="12dp"
                 android:text="Check In"
                 android:textColor="@color/fs_surface"
-                android:background="@color/purple_500"
+                android:background="@drawable/button_rounded"
                 app:layout_constraintTop_toBottomOf="@+id/checkInLonTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/checkInCheckOutBtn"
@@ -203,7 +203,7 @@
                 android:text="Check Out"
                 android:textColor="@color/fs_surface"
                 android:enabled="false"
-                android:background="@color/purple_500"
+                android:background="@drawable/button_rounded"
                 app:layout_constraintTop_toBottomOf="@+id/checkInLonTv"
                 app:layout_constraintStart_toEndOf="@+id/checkInCheckInBtn"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -238,7 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginTop="12dp"
-                    tools:ignore="MissingClass" />
+                    tools:ignore="MissingClass"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

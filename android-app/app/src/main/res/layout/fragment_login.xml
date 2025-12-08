@@ -13,21 +13,21 @@
         android:paddingTop="@dimen/fragment_vertical_margin"
         tools:context=".ui.login.LoginFragment">
 
-
+    <!-- Logo -->
     <ImageView
             android:id="@+id/logoImage"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/logo"
+            android:layout_height="180dp"
+            app:srcCompat="@drawable/logo_new"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingTop="0dp"
-            android:paddingBottom="16dp"
-            android:layout_marginTop="0dp" />
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="16dp" />
 
+    <!-- Title -->
     <TextView
             android:id="@+id/titleLogin"
             android:layout_width="wrap_content"
@@ -36,15 +36,17 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/fs_background"
-            android:layout_marginTop="176dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/logoImage"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.496"/>
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Username -->
     <EditText
             android:id="@+id/username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true"
@@ -55,11 +57,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Password -->
     <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/prompt_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
@@ -71,11 +74,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Login button -->
     <Button
             android:id="@+id/login"
             android:enabled="false"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            android:background="@drawable/button_rounded"
             android:text="@string/action_sign_in"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
@@ -83,30 +88,24 @@
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"/>
-    <!--<TextView
-            android:id="@+id/orDivider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="or"
-            android:textSize="14sp"
-            android:textColor="@color/fs_surface"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/login"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>-->
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Sign Up button -->
     <Button
             android:id="@+id/signUpButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            android:background="@drawable/button_rounded"
             android:text="CREATE ACCOUNT"
             android:textAllCaps="true"
             android:textColor="@color/purple_700"
             android:backgroundTint="@color/fs_surface_alt"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/login"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Forgot password link -->
     <TextView
             android:id="@+id/linkForgotPassword"
             android:layout_width="wrap_content"
@@ -114,18 +113,19 @@
             android:text="Forgot password?"
             android:textColor="@color/teal_200"
             android:textSize="14sp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/signUpButton"
             app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Loading spinner -->
     <ProgressBar
             android:id="@+id/loading"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@id/linkForgotPassword"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="24dp" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
