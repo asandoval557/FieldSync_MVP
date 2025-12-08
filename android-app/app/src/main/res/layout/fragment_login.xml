@@ -17,8 +17,8 @@
     <ImageView
             android:id="@+id/logoImage"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/logo"
+            android:layout_height="180dp"
+            app:srcCompat="@drawable/logo_new"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
