@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="16dp"
-              android:background="?attr/selectableItemBackground"
-              android:layout_marginBottom="8dp">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/fs_surface"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="4dp"
+        android:elevation="1dp"
+        android:padding="16dp">
 
+    <!-- Note date -->
     <TextView
             android:id="@+id/visitNotes_noteDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dec 6, 2025 at 8:23 AM"
             android:textSize="14sp"
-            android:textColor="@color/fs_surface" />
+            android:textColor="@color/fs_text_secondary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Dec 6, 2025 at 8:23 AM" />
 
+    <!-- Note body -->
     <TextView
             android:id="@+id/visitNotes_noteBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="13 min"
-            android:textColor="@color/fs_surface" />
+            android:layout_marginTop="6dp"
+            android:textSize="15sp"
+            android:textColor="@color/fs_text_secondary"
+            tools:text="Spoke with store manager about inventory, merchandising, and next visit steps." />
 
-    <!-- Divider bar to visually separate entries -->
+    <!-- Accent bar / unique entry indicator -->
     <View
             android:id="@+id/visitNotes_divider"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="4dp"
             android:layout_marginTop="12dp"
-            android:background="@color/fs_surface_alt" />
-    <!-- or use a softer line: #33FFFFFF for semi-transparent white -->
+            android:background="@color/teal_200" />
+
 </LinearLayout>
+

@@ -270,6 +270,7 @@ class VisitNotes : Fragment() {
         class VH(view: View) : RecyclerView.ViewHolder(view) {
             val noteDate: TextView = view.findViewById(R.id.visitNotes_noteDate)
             val noteBody: TextView = view.findViewById(R.id.visitNotes_noteBody)
+            val divider: View = view.findViewById(R.id.visitNotes_divider)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -283,24 +284,32 @@ class VisitNotes : Fragment() {
             val date = SimpleDateFormat(
                 "MMM d, yyyy h:mm a", Locale.getDefault()
             ).format(Date(item.timestamp))
+
             holder.noteDate.text = "Created: $date"
             holder.noteBody.text = item.body
 
-            // Lets you tap on note to edit it
+            // Click -> edit or toggle selection
             holder.itemView.setOnClickListener {
                 onNoteClick(item)
             }
 
-            // Highlight selected notes
-            holder.itemView.setBackgroundColor(
-                if (isSelected(item)) Color.LTGRAY else Color.TRANSPARENT
-            )
-
+            // Optional: subtle selection state by dimming and changing divider
+            if (isSelected(item)) {
+                holder.itemView.alpha = 0.85f
+                holder.divider.setBackgroundColor(
+                    holder.itemView.context.getColor(R.color.fs_error) // or another accent if you like
+                )
+            } else {
+                holder.itemView.alpha = 1f
+                holder.divider.setBackgroundColor(
+                    holder.itemView.context.getColor(R.color.teal_200)
+                )
+            }
         }
-
 
         override fun getItemCount(): Int = items.size
     }
+
 
     private fun showAddNoteDialog() {
 
