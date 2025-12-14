@@ -1,43 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="16dp"
-              android:background="?attr/selectableItemBackground"
-              android:layout_marginBottom="8dp">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="4dp"
+        android:elevation="1dp"
+        android:padding="16dp">
 
-    <TextView
-            android:id="@+id/visit_store_text"
+    <!-- Top row: Store info + Date/Time -->
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Store Name"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/fs_text_primary"
-            android:layout_marginBottom="4dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-    <TextView
-            android:id="@+id/visit_date_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dec 25, 2024 at 2:30 PM"
-            android:textSize="14sp"
-            android:textColor="@color/fs_text_primary"
-            android:layout_marginBottom="2dp" />
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
+            <!-- Store name -->
+            <TextView
+                    android:id="@+id/visit_store_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Store #1234 – Walmart SuperCenter" />
+
+        </LinearLayout>
+
+        <!-- Visit date/time -->
+        <TextView
+                android:id="@+id/visit_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:gravity="end"
+                android:paddingStart="8dp"
+                tools:text="Dec 25, 2024\n2:30 PM"
+                tools:ignore="RtlSymmetry" />
+    </LinearLayout>
+
+    <!-- Duration row -->
     <TextView
             android:id="@+id/visit_duration_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2h 15m"
+            android:layout_marginTop="12dp"
             android:textSize="14sp"
-            android:textColor="@color/fs_text_primary" />
+            android:textColor="@android:color/black"
+            tools:text="Duration: 2h 15m" />
 
+    <!-- Divider line (matching store management style) -->
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="12dp"
+            android:background="#F0F0F0" />
 
 </LinearLayout>

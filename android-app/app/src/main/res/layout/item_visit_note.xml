@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/fs_surface"
+        android:background="@android:color/white"
         android:layout_marginHorizontal="12dp"
         android:layout_marginVertical="4dp"
         android:elevation="1dp"
@@ -16,8 +16,8 @@
             android:id="@+id/visitNotes_noteDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/fs_text_secondary"
+            android:textSize="12sp"
+            android:textColor="#666666"
             android:maxLines="1"
             android:ellipsize="end"
             tools:text="Dec 6, 2025 at 8:23 AM" />
@@ -27,18 +27,17 @@
             android:id="@+id/visitNotes_noteBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:textSize="15sp"
-            android:textColor="@color/fs_text_secondary"
+            android:textColor="@android:color/black"
             tools:text="Spoke with store manager about inventory, merchandising, and next visit steps." />
 
-    <!-- Accent bar / unique entry indicator -->
+    <!-- Divider line (matching other cards) -->
     <View
             android:id="@+id/visitNotes_divider"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="1dp"
             android:layout_marginTop="12dp"
-            android:background="@color/teal_200" />
+            android:background="#F0F0F0" />
 
 </LinearLayout>
-

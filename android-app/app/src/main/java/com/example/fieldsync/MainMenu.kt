@@ -42,7 +42,15 @@ class MainMenu : Fragment(R.layout.fragment_main_menu) {
         }
 
         binding.mainMenuVisitHistoryBtn.setOnClickListener {
-            (activity as? MainActivity)?.SetActiveFragment(VisitHistory())
+            val visitPrefs = requireContext().getSharedPreferences("visits", Context.MODE_PRIVATE)
+            val visitId = VisitUtil.getCurrentVisitId(requireContext())
+            val storeName = visitPrefs.getString("current_store_name", null)
+
+            if (visitId != null && !storeName.isNullOrEmpty()) {
+                (activity as? MainActivity)?.SetActiveFragment(VisitHistory())
+            } else {
+                Toast.makeText(requireContext(), "Please check in to a store first.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.mainMenuVisitNotesBtn.setOnClickListener {
@@ -58,7 +66,15 @@ class MainMenu : Fragment(R.layout.fragment_main_menu) {
         }
 
         binding.mainMenuPhotoCaptureBtn.setOnClickListener {
-            (activity as? MainActivity)?.SetActiveFragment(PhotoCapture())
+            val visitPrefs = requireContext().getSharedPreferences("visits", Context.MODE_PRIVATE)
+            val visitId = VisitUtil.getCurrentVisitId(requireContext())
+            val storeName = visitPrefs.getString("current_store_name", null)
+
+            if (visitId != null && !storeName.isNullOrEmpty()) {
+                (activity as? MainActivity)?.SetActiveFragment(PhotoCapture())
+            } else {
+                Toast.makeText(requireContext(), "Please check in to a store first.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.mainMenuLogoutBtn.setOnClickListener {
