@@ -15,119 +15,106 @@
     <ImageView
             android:id="@+id/logoImage"
             android:layout_width="0dp"
-            android:layout_height="180dp"
-            app:srcCompat="@drawable/logo_new"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/logo"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:paddingBottom="24dp"
+            android:paddingBottom="80dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Vertical guideline at 50% for 2-column layout -->
-    <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/mainMenuCenterGuide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-    <!-- ROW 1 -->
-
-    <!-- CHECK IN (top-left) -->
+    <!-- CHECK IN -->
     <Button
             android:id="@+id/main_menu_checkInBtn"
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="95dp"
             android:text="@string/check_in_button"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/logoImage"
+            android:backgroundTint="@color/purple_500"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/mainMenuCenterGuide" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logoImage" />
 
-    <!-- PHOTO CAPTURE (top-right) -->
+    <!-- PHOTO CAPTURE -->
     <Button
             android:id="@+id/main_menu_photoCaptureBtn"
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="95dp"
             android:text="Photo Capture"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@id/logoImage"
-            app:layout_constraintStart_toEndOf="@id/mainMenuCenterGuide"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:backgroundTint="@color/purple_500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_menu_checkInBtn" />
 
-    <!-- ROW 2 -->
-
-    <!-- VISIT HISTORY (middle-left) -->
+    <!-- VISIT HISTORY -->
     <Button
             android:id="@+id/main_menu_visitHistoryBtn"
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="95dp"
             android:text="Visit History"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/main_menu_checkInBtn"
+            android:backgroundTint="@color/purple_500"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/mainMenuCenterGuide" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_menu_photoCaptureBtn" />
 
-    <!-- VISIT NOTES (middle-right) -->
-    <Button
-            android:id="@+id/main_menu_visitNotesBtn"
-            android:layout_width="0dp"
-            android:layout_height="125dp"
-            android:text="Visit Notes"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@id/main_menu_photoCaptureBtn"
-            app:layout_constraintStart_toEndOf="@id/mainMenuCenterGuide"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- ROW 3 -->
-
-    <!-- STORE MANAGEMENT (bottom-left) -->
+    <!-- STORE MANAGEMENT -->
     <Button
             android:id="@+id/main_menu_storeManagementBtn"
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="95dp"
             android:text="Store Management"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/main_menu_visitHistoryBtn"
+            android:backgroundTint="@color/purple_500"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/mainMenuCenterGuide" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_menu_visitHistoryBtn" />
 
-    <!-- LOGOUT (bottom-right) -->
+    <!-- VISIT NOTES -->
+    <Button
+            android:id="@+id/main_menu_visitNotesBtn"
+            android:layout_width="0dp"
+            android:layout_height="95dp"
+            android:text="Visit Notes"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/purple_500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_menu_storeManagementBtn" />
+
+    <!-- LOGOUT -->
     <Button
             android:id="@+id/main_menu_logoutBtn"
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="72dp"
             android:text="Logout"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/purple_700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main_menu_visitNotesBtn"
-            app:layout_constraintStart_toEndOf="@id/mainMenuCenterGuide"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Apply vertical chain to all buttons -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/logoImage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- NOTE: Chain is automatically created because all buttons
+             are connected top-to-bottom and share start/end constraints -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
